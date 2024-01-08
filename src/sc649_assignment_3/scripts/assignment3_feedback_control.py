@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import rospy
 from nav_msgs.msg import Odometry
-from geometry_msgs.msg import Twist,TransformStamped
+from geometry_msgs.msg import Twist, TransformStamped
 from tf.transformations import euler_from_quaternion
 import math
 import numpy as np
@@ -12,23 +12,30 @@ from sensor_msgs.msg import LaserScan
 class BicycleMobileRobot:
     def __init__(self):
         rospy.init_node('main_controller', anonymous=True)
-        self.L = 0
+        self.L = 0.40
         self.active_waypoint = np.zeros(2)
         self.radius_icecone = 0
         self.start_point = np.zeros(2)
         self.end_point = np.zeros(2)
         self.max_range = None
         self.pose = []
+        self.transformedPose = []
+        self.del_T = 2.7
         self.ranges = []
         self.angles = []
-        self.target_goal = [50,50] 
+        start_time = time.time()
+        self.speed = 0
+        self.target_goal = [5, 0]
+        self.linear_velocity_x = 0
+        self.linear_velocity_y = 0
+        self.angular_velocity_z = 0
+        self.steer_angle = 0
 
         self.lidar_subscriber = rospy.Subscriber('/scan', LaserScan, self.lidar_callback, queue_size=10)
-        rospy.Subscriber('/pf/pose/odom',Odometry,self.RobotPose)
-        pub = rospy.Publisher('/racecar/ackermann_cmd_mux/output', AckermannDriveStamped, queue_size=10)
-        velocity_msg = AckermannDriveStamped()
-        rate = rospy.Rate(10)
-        
+        rospy.Subscriber('/pf/pose/odom', Odometry, self.RobotPose)
+        self.pub = rospy.Publisher('/racecar/ackermann_cmd_mux/output', AckermannDriveStamped, queue_size=10)
+        self.velocity_msg = AckermannDriveStamped()
+        self.rate = rospy.Rate(10)
         while not rospy.is_shutdown():
             if len(self.pose) == 0:
                 continue
@@ -36,24 +43,35 @@ class BicycleMobileRobot:
             if len(self.ranges) == 0:
                 continue
 
-            [velocity_msg.drive.speed, velocity_msg.drive.steering_angle_velocity] = self.ipc_navigate(self.target_goal)
-            pub.publish(velocity_msg)
-        rate.sleep()
+            [self.velocity_msg.drive.speed, self.velocity_msg.drive.steering_angle] = self.ipc_navigate(
+                self.target_goal)
+            self.pub.publish(self.velocity_msg)
+            print(self.speed,self.velocity_msg.drive.speed,time.time() - start_time)
+            loop_duration = time.time() - start_time
+            #print(time.time())
+            # Print the loop duration
+            #print(f"Loop Time: {loop_duration:.6f} seconds")
+            #start_time = time.time()
+        self.rate.sleep()
 
     def lidar_callback(self, msg):
-        print("range funcc")
         self.ranges = msg.ranges
         self.angles = np.linspace(msg.angle_min, msg.angle_max, len(msg.ranges))
-        print(self.ranges[2])
-        print(self.angles[2])
 
-    def RobotPose(self,data):
-        print("pose func was called")
-        self.pose = [data.pose.pose.position.x,data.pose.pose.position.y,euler_from_quaternion([data.pose.pose.orientation.x,data.pose.pose.orientation.y,data.pose.pose.orientation.z,data.pose.pose.orientation.w])[2]]
-        print(self.pose)
+    def RobotPose(self, data):
+        yaw = euler_from_quaternion([data.pose.pose.orientation.x, data.pose.pose.orientation.y,
+                                           data.pose.pose.orientation.z, data.pose.pose.orientation.w])[2]
+        self.pose = [data.pose.pose.position.x, data.pose.pose.position.y,yaw,10]
+        self.linear_velocity_x = data.twist.twist.linear.x
+        self.linear_velocity_y = data.twist.twist.linear.y
+        self.angular_velocity_z = data.twist.twist.angular.z
+        self.speed = np.sqrt((self.linear_velocity_x ) ** 2 + (self.linear_velocity_y) ** 2)
 
     def euclidean_distance(self, x1, y1, x2, y2):
-        return np.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2) 
+        return np.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+
+    def angle_normalizer(self, angle):
+        return (angle + np.pi) % (2 * np.pi) - np.pi
     
     def R_optimizer(self, int_goal_x, int_goal_y, Robot_x, Robot_y, T, R_max, angles, ranges):
         angle_diff = angles[T] - np.arctan2(int_goal_y, int_goal_x)
@@ -68,120 +86,177 @@ class BicycleMobileRobot:
             R_opt = 0
 
         return R_opt
-    
 
-
-    def sensor_data_process(self, ranges, T, pose):
-        I = 0
-        x_ref = ranges[T]
+    def sensor_data_process(self,ranges, T, pose):
+        I = 0   #we dont want this value
+        x_ref = ranges[T]    #initialising x_ref, cant be greater than ranges[T]
         N = len(ranges)
         del_theta = 2 * np.pi / N
-        
-        pose = np.mod(pose, 2 * np.pi)
-        robot_index = int(np.round(pose / del_theta) + 1)
-        if robot_index > N:
-            robot_index = 1
-        
-        theta = min(abs(T - robot_index) * del_theta, 2 * np.pi - abs(T - robot_index) * del_theta)
-        
-        if theta >= np.pi / 2:
-            if pose <= np.pi:
-                robot_index = int(np.round((pose + np.pi) / del_theta) + 1)
-                if robot_index > N:
-                    robot_index = 1
-            if pose > np.pi:
-                robot_index = int(np.round((pose - np.pi) / del_theta) + 1)
-        
-            theta = min(abs(T - robot_index) * del_theta, 2 * np.pi - abs(T - robot_index) * del_theta)
-            if theta == abs(T - robot_index) * del_theta:
-                a = 2 * T - robot_index
-                if a > N:
-                    a = a - N
-                end_idx = int(min(a, robot_index))
-                start_idx = int(max(a, robot_index))
-                for i in range(start_idx, N):
 
-                    term = (-np.cos(theta) ** 2 + (np.cos(theta - (i - start_idx) * del_theta)) ** 2) ** 0.5
-                    if ranges[i] < x_ref * (np.cos(theta - (i - start_idx) * del_theta) + term):
-                        x_ref = ranges[i] / (np.cos(theta - (i - start_idx) * del_theta) + term)
-                        if np.imag(x_ref) != 0:
-                            a = 4
-                for i in range(0, end_idx):
-                    term = (-np.cos(theta) ** 2 + (np.cos(theta - (i - 1) * del_theta)) ** 2) ** 0.5
-                    if ranges[i] < x_ref * (np.cos(theta - (i - 1) * del_theta) + term):
-                        x_ref = ranges[i] / (np.cos(theta - (i - 1) * del_theta) + term)
-                        if np.imag(x_ref) != 0:
-                            a = 5
-            elif a < 1:
-                a = a + N
-                end_idx = min(a, robot_index)
-                start_idx = max(a, robot_index)
-                for i in range(start_idx, N):
-                    term = (-np.cos(theta) ** 2 + (np.cos(theta - (i - start_idx) * del_theta)) ** 2) ** 0.5
-                    if ranges[i] < x_ref * (np.cos(theta - (i - start_idx) * del_theta) + term):
-                        x_ref = ranges[i] / (np.cos(theta - (i - start_idx) * del_theta) + term)
-                        if np.imag(x_ref) != 0:
-                            a = 6
-                for i in range(0, end_idx):
-                    term = (-np.cos(theta) ** 2 + (np.cos(theta - (i - 1) * del_theta)) ** 2) ** 0.5
-                    if ranges[i] < x_ref * (np.cos(theta - (i - 1) * del_theta) + term):
-                        x_ref = ranges[i] / (np.cos(theta - (i - 1) * del_theta) + term)
-                        if np.imag(x_ref) != 0:
-                            a = 7
-            else:
-                start_idx = min(a, robot_index)
-                end_idx = max(a, robot_index)
-                for i in range(start_idx, end_idx):
-                    term = (-np.cos(theta) ** 2 + (np.cos(theta - (i - start_idx) * del_theta)) ** 2) ** 0.5
-                    if ranges[i] < x_ref * (np.cos(theta - (i - start_idx) * del_theta) + term):
-                        x_ref = ranges[i] / (np.cos(theta - (i - start_idx) * del_theta) + term)
- 
-            if theta == 2 * np.pi - abs(T - robot_index) * del_theta:
-                p = min(T, robot_index)
-                q = max(T, robot_index)
-                diff = p - q + N - 1
-                if robot_index == p:
-                    a = T - diff - 1
-                if robot_index == q:
-                    a = T + diff + 1
-                end_idx = min(a, robot_index)
-                start_idx = max(a, robot_index)
-                for i in range(start_idx, N):
-                    term = (-np.cos(theta) ** 2 + (np.cos(theta - (i - start_idx) * del_theta)) ** 2) ** 0.5
-                    if ranges[i] < x_ref * (np.cos(theta - (i - start_idx) * del_theta) + term):
-                        x_ref = ranges[i] / (np.cos(theta - (i - start_idx) * del_theta) + term)
-                        if np.imag(x_ref) != 0:
-                            a = 2
-                for i in range(0, end_idx):
-                    term = (-np.cos(theta) ** 2 + (np.cos(theta - (i - 1) * del_theta)) ** 2) ** 0.5
-                    if ranges[i] < x_ref * (np.cos(theta - (i - 1) * del_theta) + term):
-                        x_ref = ranges[i] / (np.cos(theta - (i - 1) * del_theta) + term)
-                        if np.imag(x_ref) != 0:
-                            a = 3
+        pose = np.mod(pose, 2 * np.pi)
+        robot_index = int(pose // del_theta) 
+
+        theta = min(abs(T - robot_index) * del_theta, 2 * np.pi - abs(T - robot_index) * del_theta)
+        #3 cases depending on theta
+        if theta < np.pi / 2:
+                a = 2 * T - robot_index
+                a = np.mod(a,N)
+                if theta == 2 * np.pi - abs(T - robot_index) * del_theta:
+
+                    end_idx = min(a, robot_index)
+                    start_idx = max(a, robot_index)
+
+                    for i in range(start_idx, N):
+                        if ranges[i] < x_ref * (np.cos(theta - (i - start_idx) * del_theta) +
+                                                (-np.cos(theta) ** 2 + (np.cos(theta - (i - start_idx) * del_theta)) ** 2) ** 0.5):
+                            x_ref = ranges[i] / (np.cos(theta - (i - start_idx) * del_theta) +
+                                                (-np.cos(theta) ** 2 + (np.cos(theta - (i - start_idx) * del_theta)) ** 2) ** 0.5)
+
+                    for i in range(0, end_idx+1):
+                        if ranges[i] < x_ref * (np.cos(theta - (i) * del_theta) +
+                                                (-np.cos(theta) ** 2 + (np.cos(theta - (i) * del_theta)) ** 2) ** 0.5):
+                            x_ref = ranges[i] / (np.cos(theta - (i) * del_theta) +
+                                                (-np.cos(theta) ** 2 + (np.cos(theta - (i) * del_theta)) ** 2) ** 0.5)
+
+                if theta == abs(T - robot_index) * del_theta:
+                    a = np.mod(2 * T - robot_index - N, N)
+                    if abs((T-robot_index)) == abs((T-a)):
+                        end_idx = max(a, robot_index)
+                        start_idx = min(a, robot_index)
+                        for i in range(start_idx, robot_index+1):
+                            if ranges[i] < x_ref * (np.cos(theta - (i - start_idx) * del_theta) +
+                                                    (-np.cos(theta) ** 2 + (np.cos(theta - (i - start_idx) * del_theta)) ** 2) ** 0.5):
+                                x_ref = ranges[i] / (np.cos(theta - (i - start_idx) * del_theta) +
+                                                    (-np.cos(theta) ** 2 + (np.cos(theta - (i - start_idx) * del_theta)) ** 2) ** 0.5)
+                                if np.imag(x_ref) != 0:
+                                    a = 6
+                    else:                
+                        end_idx = min(a, robot_index)
+                        start_idx = max(a, robot_index)
+                        for i in range(start_idx, N):
+                            if ranges[i] < x_ref * (np.cos(theta - (i - start_idx) * del_theta) +
+                                                    (-np.cos(theta) ** 2 + (np.cos(theta - (i - start_idx) * del_theta)) ** 2) ** 0.5):
+                                x_ref = ranges[i] / (np.cos(theta - (i - start_idx) * del_theta) +
+                                                    (-np.cos(theta) ** 2 + (np.cos(theta - (i - start_idx) * del_theta)) ** 2) ** 0.5)
+
+                        for i in range(0, end_idx+1):
+                            if ranges[i] < x_ref * (np.cos(theta - (i) * del_theta) +
+                                                    (-np.cos(theta) ** 2 + (np.cos(theta - (i) * del_theta)) ** 2) ** 0.5):
+                                x_ref = ranges[i] / (np.cos(theta - (i) * del_theta) +
+                                                    (-np.cos(theta) ** 2 + (np.cos(theta - (i) * del_theta)) ** 2) ** 0.5)
+
+        if theta == np.pi / 2:
+            x_ref = 0
+
+        if theta > np.pi / 2:
+                a = 2 * T - robot_index
+                a = np.mod(a,N)
+                if pose < np.pi:
+                    robot_index = int((pose + np.pi) // del_theta) 
+                if pose >= np.pi:
+                    robot_index = int((pose - np.pi) // del_theta) 
+
+                theta = min(abs(T - robot_index) * del_theta, 2 * np.pi - abs(T - robot_index) * del_theta)
+
+                if theta == 2 * np.pi - abs(T - robot_index) * del_theta:
+
+                    end_idx = min(a, robot_index)
+                    start_idx = max(a, robot_index)
+
+                    for i in range(start_idx, N):
+                        if ranges[i] < x_ref * (np.cos(theta - (i - start_idx) * del_theta) +
+                                                (-np.cos(theta) ** 2 + (np.cos(theta - (i - start_idx) * del_theta)) ** 2) ** 0.5):
+                            x_ref = ranges[i] / (np.cos(theta - (i - start_idx) * del_theta) +
+                                                (-np.cos(theta) ** 2 + (np.cos(theta - (i - start_idx) * del_theta)) ** 2) ** 0.5)
+
+                    for i in range(0, end_idx+1):
+                        if ranges[i] < x_ref * (np.cos(theta - (i) * del_theta) +
+                                                (-np.cos(theta) ** 2 + (np.cos(theta - (i) * del_theta)) ** 2) ** 0.5):
+                            x_ref = ranges[i] / (np.cos(theta - (i) * del_theta) +
+                                                (-np.cos(theta) ** 2 + (np.cos(theta - (i) * del_theta)) ** 2) ** 0.5)
+
+                if theta == abs(T - robot_index) * del_theta:
+                    a = np.mod(2 * T - robot_index - N, N)
+                    if abs((T-robot_index)) == abs((T-a)):
+                        end_idx = max(a, robot_index)
+                        start_idx = min(a, robot_index)
+                        for i in range(start_idx, robot_index+1):
+                            if ranges[i] < x_ref * (np.cos(theta - (i - start_idx) * del_theta) +
+                                                    (-np.cos(theta) ** 2 + (np.cos(theta - (i - start_idx) * del_theta)) ** 2) ** 0.5):
+                                x_ref = ranges[i] / (np.cos(theta - (i - start_idx) * del_theta) +
+                                                    (-np.cos(theta) ** 2 + (np.cos(theta - (i - start_idx) * del_theta)) ** 2) ** 0.5)
+                                if np.imag(x_ref) != 0:
+                                    a = 6
+                    else:                
+                        end_idx = min(a, robot_index)
+                        start_idx = max(a, robot_index)
+                        for i in range(start_idx, N):
+                            if ranges[i] < x_ref * (np.cos(theta - (i - start_idx) * del_theta) +
+                                                    (-np.cos(theta) ** 2 + (np.cos(theta - (i - start_idx) * del_theta)) ** 2) ** 0.5):
+                                x_ref = ranges[i] / (np.cos(theta - (i - start_idx) * del_theta) +
+                                                    (-np.cos(theta) ** 2 + (np.cos(theta - (i - start_idx) * del_theta)) ** 2) ** 0.5)
+
+                        for i in range(0, end_idx+1):
+                            if ranges[i] < x_ref * (np.cos(theta - (i) * del_theta) +
+                                                    (-np.cos(theta) ** 2 + (np.cos(theta - (i) * del_theta)) ** 2) ** 0.5):
+                                x_ref = ranges[i] / (np.cos(theta - (i) * del_theta) +
+                                                    (-np.cos(theta) ** 2 + (np.cos(theta - (i) * del_theta)) ** 2) ** 0.5)
         return x_ref, I
 
-                                                                    
+
+                                                                        
     def ipc_navigate(self, target_goal):
-  
+        self.transformedPose = np.array([self.pose[0] + self.L * math.cos(self.pose[2]),
+                                         self.pose[1] + self.L * math.sin(self.pose[2]),
+                                         self.angle_normalizer(self.pose[2] + self.pose[3]),
+                                         self.angle_normalizer(self.pose[2])])        
+    
         R_max = np.zeros(len(self.ranges))
         R_opt = np.zeros(len(self.ranges))
         D_check = np.zeros(len(self.ranges))
-
         for T in range(len(self.ranges)):
-            R_max[T], _ = self.sensor_data_process(self.ranges, T, self.pose[2])
-            R_opt[T] = self.R_optimizer(self.target_goal[0], self.target_goal[1], self.pose[0], self.pose[1], T, R_max[T],
+            R_max[T], _ = self.sensor_data_process(self.ranges, T, self.transformedPose[2])
+            R_opt[T] = self.R_optimizer(self.target_goal[0], self.target_goal[1], self.transformedPose[0], self.transformedPose[1], T, R_max[T],
                                    self.angles, self.ranges)
             D_check[T] = self.euclidean_distance(target_goal[0], target_goal[1],
-                                            self.pose[0] + R_opt[T] * np.cos(self.angles[T]),
-                                            self.pose[1] + R_opt[T] * np.sin(self.angles[T]))
+                                            self.transformedPose[0] + R_opt[T] * np.cos(self.angles[T]),
+                                            self.transformedPose[1] + R_opt[T] * np.sin(self.angles[T]))
 
         i_best = np.argmin(D_check)
-
+        theta = abs(self.transformedPose[3] - self.angles[i_best])
         way_x_opt = self.pose[0] + R_opt[i_best] * np.cos(self.angles[i_best])
         way_y_opt = self.pose[1] + R_opt[i_best] * np.sin(self.angles[i_best])
         self.active_waypoint = np.array([way_x_opt, way_y_opt])
+        self.transformedPose = np.array([self.pose[0] + self.L * math.cos(self.pose[2]),
+                                         self.pose[1] + self.L * math.sin(self.pose[2]),
+                                         self.angle_normalizer(self.pose[2] + self.pose[3]),
+                                         self.angle_normalizer(self.pose[2])])
+        self.radius_icecone = self.euclidean_distance(self.active_waypoint[0], self.active_waypoint[1],
+                                                      self.transformedPose[0], self.transformedPose[1]) * abs(
+            np.sin(theta))
 
-        rel_bearing = self.pose[2] - np.arctan2(self.pose[1] - way_y_opt, self.pose[0] - way_x_opt)
+        start_point_x = self.transformedPose[0] + \
+                        self.euclidean_distance(self.active_waypoint[0], self.active_waypoint[1],
+                                                self.transformedPose[0], self.transformedPose[1]) * \
+                        np.cos(theta) * np.cos(self.transformedPose[2])
+        start_point_y = self.transformedPose[1] + \
+                        self.euclidean_distance(self.active_waypoint[0], self.active_waypoint[1],
+                                                self.transformedPose[0], self.transformedPose[1]) * \
+                        np.cos(theta) * np.sin(self.transformedPose[2])
+
+        end_point_x = self.transformedPose[0] + \
+                      self.euclidean_distance(self.active_waypoint[0], self.active_waypoint[1],
+                                              self.transformedPose[0], self.transformedPose[1]) * \
+                      np.cos(theta) * np.cos(2 * self.angles[i_best] - self.transformedPose[2])
+        end_point_y = self.transformedPose[1] + \
+                      self.euclidean_distance(self.active_waypoint[0], self.active_waypoint[1],
+                                              self.transformedPose[0], self.transformedPose[1]) * \
+                      np.cos(theta) * np.sin(2 * self.angles[i_best] - self.transformedPose[2])
+
+        self.start_point = np.array([start_point_x, start_point_y])
+        self.end_point = np.array([end_point_x, end_point_y]) 
+        R = np.linalg.norm(self.active_waypoint - self.transformedPose[:2])      
+        rel_bearing = self.transformedPose[2] - np.arctan2(self.transformedPose[1] - way_y_opt, self.transformedPose[0] - way_x_opt)
 
         if rel_bearing >= np.pi:
             rel_bearing = rel_bearing - 2 * np.pi
@@ -198,10 +273,28 @@ class BicycleMobileRobot:
         K_1 = 10
         K_2 = 5
 
-        v = -K_1 * np.tanh(R_opt[i_best]) * np.sign(np.cos(rel_bearing))
-        omega = -K_2 * np.sign(sigma) * np.abs(sigma) ** 0.5 + (v / R_opt[i_best]) * np.sin(rel_bearing)
+        w_1 = -K_1 * np.tanh(R) * np.sign(np.cos(rel_bearing))
+        w_2 = -K_2 * np.sign(sigma) * abs(sigma)**0.5 + (w_1 / R) * np.sin(rel_bearing)
 
-        self.controls = np.array([v, omega])
+        self.transformedPose += np.array([[math.cos(self.transformedPose[2]), 0],
+                                          [math.sin(self.transformedPose[2]), 0],
+                                          [0, 1],
+                                          [np.sin(self.angle_normalizer(self.transformedPose[2] -
+                                                                        self.transformedPose[3])) / self.L, 0]]) @ \
+                               np.array([w_1, w_2])*self.del_T 
+
+        self.transformedPose[2] = self.angle_normalizer(self.transformedPose[2])
+        self.transformedPose[3] = self.angle_normalizer(self.transformedPose[3])
+
+        V = np.linalg.solve(np.array([[1, 0],
+                                      [np.sin(self.angle_normalizer(self.transformedPose[2] -
+                                                                     self.transformedPose[3])) / self.L, 1]]),
+                            np.array([w_1, w_2]))
+        omega = V[1]
+        self.steer_angle += omega*self.del_T
+        V[0] = V[0]*np.cos(self.steer_angle)
+        #print("steer angle",self.steer_angle)
+        self.controls = np.array([V[0], self.steer_angle])
         return self.controls   
     
 if __name__ == '__main__':    

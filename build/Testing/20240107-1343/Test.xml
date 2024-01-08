@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="(empty)"
+	BuildStamp="20240107-1343-Experimental"
+	Name="anushka-ASUS-TUF-Gaming-A15-FA506IC-FA506IC"
+	Generator="ctest-3.16.3"
+	CompilerName="/usr/bin/c++"
+	CompilerVersion="9.4.0"
+	OSName="Linux"
+	Hostname="anushka-ASUS-TUF-Gaming-A15-FA506IC-FA506IC"
+	OSRelease="5.15.0-91-generic"
+	OSVersion="#101~20.04.1-Ubuntu SMP Thu Nov 16 14:22:28 UTC 2023"
+	OSPlatform="x86_64"
+	Is64Bits="1"
+	VendorString="AuthenticAMD"
+	VendorID="Advanced Micro Devices"
+	FamilyID="23"
+	ModelID="96"
+	ProcessorCacheSize="512"
+	NumberOfLogicalCPU="16"
+	NumberOfPhysicalCPU="8"
+	TotalVirtualMemory="2047"
+	TotalPhysicalMemory="15401"
+	LogicalProcessorsPerPhysical="2"
+	ProcessorClockFrequency="2057.38"
+	>
+	<Testing>
+		<StartDateTime>Jan 07 19:13 IST</StartDateTime>
+		<StartTestTime>1704634999</StartTestTime>
+		<TestList/>
+		<EndDateTime>Jan 07 19:13 IST</EndDateTime>
+		<EndTestTime>1704634999</EndTestTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Testing>
+</Site>
