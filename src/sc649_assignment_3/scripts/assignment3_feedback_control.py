@@ -13,9 +13,10 @@ from geometry_msgs.msg import Point, Pose
 import tf
 
 class BicycleMobileRobot:
-    def __init__(self):
+    def __init__(self,robot_name=None):
         rospy.init_node('main_controller', anonymous=True)
         self.L = 0.40
+        #self.name = robot_name
         self.active_waypoint = np.zeros(2)
         self.radius_icecone = 0
         self.start_point = np.zeros(2)
@@ -28,7 +29,7 @@ class BicycleMobileRobot:
         self.angles = []
         start_time = time.time()
         self.speed = 0
-        self.target_goal = [0,10 ,0]
+        self.target_goal = [50,0 ,0]
         self.linear_velocity_x = 0
         self.linear_velocity_y = 0
         self.angular_velocity_z = 0
@@ -42,7 +43,7 @@ class BicycleMobileRobot:
         self.pub = rospy.Publisher('/racecar/ackermann_cmd_mux/output', AckermannDriveStamped, queue_size=10)
         self.waypoint_publisher = rospy.Publisher('/waypoints', MarkerArray, queue_size=10)
         self.velocity_msg = AckermannDriveStamped()
-        self.rate = rospy.Rate(100)
+        self.rate = rospy.Rate(1000)
         while not rospy.is_shutdown():
             start_time = time.time()
 
@@ -53,6 +54,11 @@ class BicycleMobileRobot:
                 continue
 
             [self.velocity_msg.drive.speed, self.velocity_msg.drive.steering_angle] = self.ipc_navigate(self.target_goal)
+            #turtlebot3_0.ipc_navigate([10,2])
+            #turtlebot3_1.ipc_navigate([6.25,2])
+            #turtlebot3_2.ipc_navigate([-10.0,2])
+            #turtlebot3_3.ipc_navigate([-1.0,20.75])
+            #turtlebot3_4.ipc_navigate([-1.0,10.25])
             #[self.velocity_msg.drive.speed, self.velocity_msg.drive.steering_angle] = self.ipc_navigate(
              #self.target_goal)
             loop_duration = time.time() - start_time
@@ -62,6 +68,8 @@ class BicycleMobileRobot:
             waypoints = self.generate_circle_markers(self.range_cal,self.active_waypoint, self.radius_icecone, self.start_point, self.end_point, self.pose, self.target_goal)  # Implement your waypoint generation logic
             marker_array = MarkerArray(markers=waypoints)
             self.waypoint_publisher.publish(marker_array)
+                # Create an instance of the TurtleBot3 class
+
             #print(time.time())
             # Print the loop duration
             #print(f"Loop Time: {loop_duration:.6f} seconds")
@@ -98,7 +106,7 @@ class BicycleMobileRobot:
 
             marker.points.append(point)
             markers.append(marker)
-
+        
         arrow_marker = Marker()
         arrow_marker.header.frame_id = "base_link"
         arrow_marker.id = len(markers)  # Ensure a unique ID
@@ -112,6 +120,8 @@ class BicycleMobileRobot:
         robot_pose.position.z = 0.0
 
         # Calculate quaternion for desired incline angle (e.g., 45 degrees)
+        
+        quaternion = [1,0,0,0]
         incline_angle = self.pose[2]*180/np.pi  # Replace with your desired angle in degrees
         quaternion = tf.transformations.quaternion_from_euler(0.0, 0.0, math.radians(incline_angle), axes='sxyz')
 
@@ -132,6 +142,8 @@ class BicycleMobileRobot:
         arrow_marker.color.b = 0.0
 
         markers.append(arrow_marker)
+        
+        
         # Draw a line joining two pints
         line_marker = Marker()
         line_marker.header.frame_id = "base_link"
@@ -172,36 +184,60 @@ class BicycleMobileRobot:
         line_marker_2.color.b = 0.0
 
         markers.append(line_marker_2)
-
-        cloud_marker = Marker()
-        cloud_marker.header.frame_id = "base_link"
-        cloud_marker.id = len(markers)
-        cloud_marker.type = Marker.POINTS
-        cloud_marker.action = Marker.ADD
-        cloud_marker.pose.orientation.w = 1.0
-        cloud_marker.scale.x = 0.05  # Point size
-        cloud_marker.scale.y = 0.05
-        cloud_marker.color.a = 1.0
-        cloud_marker.color.r = 0.0
-        cloud_marker.color.g = 0.0
-        cloud_marker.color.b = 1.0
-
-        angle_array = np.array(self.angles) + self.pose[2]
-        for i, angle in enumerate(angle_array):
+        """
+        angle_Arr = np.array(self.angles) + self.pose[2]
+        for i, angle in enumerate(angle_Arr):
             # Assuming range_cal is an array of range readings
             range_value = range_cal[i]
-            x = center[0] + range_value * math.cos(angle)
-            y = center[1] + range_value * math.sin(angle)
-            z = 0
 
+            # Calculate the point based on range and angle
+            x = self.transformedPose[0] + range_value * np.cos(angle)
+            y = self.transformedPose[1] + range_value * np.sin(angle) 
+            z = 0.0
+            #print(x,y,z)
+            # Create a Point message for the marker
             point = Point()
             point.x = x
             point.y = y
             point.z = z
 
-            cloud_marker.points.append(point)
+            # Create a Marker for each point
+            marker = Marker()
+            marker.header.frame_id = "base_link"
+            marker.id = i
+            marker.type = Marker.POINTS  # You can use SPHERE or POINTS based on your preference
+            marker.action = Marker.ADD
+            marker.pose.position = point
+            marker.scale.x = 2  # Adjust the size of the marker
+            marker.scale.y = 0.1
+            marker.scale.z = 0.1
+            marker.color.a = 1.0
+            marker.color.r = 0.0
+            marker.color.g = 0.0
+            marker.color.b = 1.0
+            marker.points.append(point)
 
-        markers.append(cloud_marker)
+            # Append the marker to the MarkerArray
+            markers.append(marker)
+        """
+        # Add Sphere Marker
+        sphere_marker = Marker()
+        sphere_marker.header.frame_id = "base_link"
+        sphere_marker.id = len(markers)  # Ensure a unique ID
+        sphere_marker.type = Marker.SPHERE
+        sphere_marker.action = Marker.ADD
+        sphere_marker.pose.position.x = self.target_goal[0]  # Use the position of the point as the position of the sphere
+        sphere_marker.pose.position.y = self.target_goal[1]  # Use the position of the point as the position of the sphere
+        sphere_marker.pose.position.z = self.target_goal[2]  # Use the position of the point as the position of the sphere
+        sphere_marker.scale.x = 0.15  # Sphere diameter
+        sphere_marker.scale.y = 0.15
+        sphere_marker.scale.z = 0.15
+        sphere_marker.color.a = 1.0
+        sphere_marker.color.r = 0.0
+        sphere_marker.color.g = 0.0
+        sphere_marker.color.b = 1.0
+
+        markers.append(sphere_marker)
 
         return markers
     
@@ -214,6 +250,13 @@ class BicycleMobileRobot:
             self.ranges = [self.ranges[i] for i in range(len(self.ranges)) if i % 4 == 0]
         if len(self.angles) > 271:    
             self.angles = [self.angles[i] for i in range(len(self.angles)) if i % 4 == 0]
+        for i in range(130,141):
+            if self.ranges[i]  > 0.3:
+                self.ranges[i] = self.ranges[i] - 0.5
+                #print("range enc")
+            else:
+                self.ranges[i] = 0.01      
+                #print("no ran")
         #print(180/np.pi*msg.angle_min,180/np.pi*msg.angle_max)
         #print(len(self.ranges))
 
@@ -249,16 +292,18 @@ class BicycleMobileRobot:
                     #print("way1", R_max)
                 else:
                     R_opt = distance_to_goal * np.cos(angle_diff)
+                if np.cos(angle_diff) <= 0:
+                     print("issue")    
             else:
                 R_opt = 0
-                print("Way2")
+                #print("Way2")
             #print("opt", R_opt, T)    
         return R_opt
 
 
     def sensor_data_process(self,ranges, T, pose,angles):
-        lim_left = np.argmin(np.abs(np.array(angles) + np.pi*3/8)) #left index for ice cone to be lidar range
-        lim_right = np.argmin(np.abs(np.array(angles) - np.pi*3/8)) 
+        #lim_left = np.argmin(np.abs(np.array(angles) + np.pi*3/8)) #left index for ice cone to be lidar range
+        #lim_right = np.argmin(np.abs(np.array(angles) - np.pi*3/8)) 
         robot_index = int(np.where(np.array(angles)==0)[0])
         #print(robot_index,"rob")
         N = len(ranges)
@@ -339,10 +384,10 @@ class BicycleMobileRobot:
         #print(R_max,"rmax", R_opt)
         #print(D_check[68:203])    
         i_best = 67+np.argmin(D_check[68:203])
-        if i_best <67 or i_best > 202:
-            print("isssue")
-        if R_opt[i_best] == 0:
-            print(i_best)
+        #if i_best <67 or i_best > 202:
+        #    print("isssue")
+        #if R_opt[i_best] == 0:
+        #    print(i_best , "is 0")
              #print(R_max[68:203])
         #print(D_check[68:203])     
         #print("ii",i_best)
@@ -390,7 +435,7 @@ class BicycleMobileRobot:
         self.end_point = np.array([end_point_x, end_point_y]) 
         R = self.euclidean_distance(self.active_waypoint[0] ,self.active_waypoint[1], self.transformedPose[0],self.transformedPose[1])   
         #print(R,"r")   
-        K_1 = 1
+        K_1 = 0.1
         K_2 = 2
         if R == 0:
              R = 0.001
@@ -415,22 +460,40 @@ class BicycleMobileRobot:
                                                                      self.transformedPose[3])) / self.L, 1]]),
                             np.array([w_1, w_2]))
         omega = V[1]
-        self.steer_angle += omega*1/100
+        self.steer_angle += omega*1/1000
         
         V[0] = V[0]*np.cos(self.steer_angle)
         #print("steer angle",self.steer_angle)
         #print(V[0])
         self.controls = np.array([V[0], self.steer_angle])
-        if self.euclidean_distance(self.pose[0], self.pose[1], target_goal[0], target_goal[1]) < 0.5:
+        if self.euclidean_distance(self.pose[0], self.pose[1], target_goal[0], target_goal[1]) < 0.1:
              print("reached goal")
              self.controls = np.array([0,0])
         #self.controls = np.array([5, np.pi/6])
-        return self.controls   
-    
+        return self.controls 
+      
+class TurtleBot3(BicycleMobileRobot):
+    def __init__(self, robot_name):
+        super(TurtleBot3, self).__init__(robot_name)
+
+    def update(self):
+        # Example control logic:
+        # Stop if the robot is close to an obstacle
+        if self.odometry.pose.pose.position.x < 0.1:
+            self.publish_velocity(0.0, 0.0)
+        else:
+            # Move forward at a constant linear velocity
+            self.publish_velocity(0.2, 0.0)
+
 if __name__ == '__main__':    
     try:
         time.sleep(5)
         BicycleMobileRobot()
+        #turtlebot3_0 = BicycleMobileRobot('tb3_0')
+        #turtlebot3_1 = BicycleMobileRobot('tb3_1')
+        #turtlebot3_2 = BicycleMobileRobot('tb3_2')
+        #turtlebot3_3 = BicycleMobileRobot('tb3_3')
+        #turtlebot3_4 = BicycleMobileRobot('tb3_4')
     except rospy.ROSInterruptException:
         pass
   
