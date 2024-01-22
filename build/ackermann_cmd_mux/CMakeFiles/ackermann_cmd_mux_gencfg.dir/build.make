@@ -61,7 +61,7 @@ ackermann_cmd_mux/CMakeFiles/ackermann_cmd_mux_gencfg: /home/anushka/ws/devel/li
 /home/anushka/ws/devel/include/ackermann_cmd_mux/reloadConfig.h: /opt/ros/noetic/share/dynamic_reconfigure/templates/ConfigType.py.template
 /home/anushka/ws/devel/include/ackermann_cmd_mux/reloadConfig.h: /opt/ros/noetic/share/dynamic_reconfigure/templates/ConfigType.h.template
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/anushka/ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating dynamic reconfigure files from cfg/reload.cfg: /home/anushka/ws/devel/include/ackermann_cmd_mux/reloadConfig.h /home/anushka/ws/devel/lib/python3/dist-packages/ackermann_cmd_mux/cfg/reloadConfig.py"
-	cd /home/anushka/ws/build/ackermann_cmd_mux && ../catkin_generated/env_cached.sh /home/anushka/ws/build/ackermann_cmd_mux/setup_custom_pythonpath.sh /home/anushka/ws/src/ackermann_cmd_mux/cfg/reload.cfg /opt/ros/noetic/share/dynamic_reconfigure/cmake/.. /home/anushka/ws/devel/share/ackermann_cmd_mux /home/anushka/ws/devel/include/ackermann_cmd_mux /home/anushka/ws/devel/lib/python3/dist-packages/ackermann_cmd_mux
+	cd /home/anushka/ws/build/ackermann_cmd_mux && ../catkin_generated/env_cached.sh /usr/bin/python3 /home/anushka/ws/src/ackermann_cmd_mux/cfg/reload.cfg /opt/ros/noetic/share/dynamic_reconfigure/cmake/.. /home/anushka/ws/devel/share/ackermann_cmd_mux /home/anushka/ws/devel/include/ackermann_cmd_mux /home/anushka/ws/devel/lib/python3/dist-packages/ackermann_cmd_mux
 
 /home/anushka/ws/devel/share/ackermann_cmd_mux/docs/reloadConfig.dox: /home/anushka/ws/devel/include/ackermann_cmd_mux/reloadConfig.h
 	@$(CMAKE_COMMAND) -E touch_nocreate /home/anushka/ws/devel/share/ackermann_cmd_mux/docs/reloadConfig.dox
