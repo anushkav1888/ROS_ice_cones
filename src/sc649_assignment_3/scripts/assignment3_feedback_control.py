@@ -29,7 +29,7 @@ class BicycleMobileRobot:
         self.angles = []
         start_time = time.time()
         self.speed = 0
-        self.target_goal = [50,0 ,0]
+        self.target_goal = [100,1 ,0]
         self.linear_velocity_x = 0
         self.linear_velocity_y = 0
         self.angular_velocity_z = 0
@@ -37,13 +37,14 @@ class BicycleMobileRobot:
         self.min_angle = 0
         self.max_angle = 0
         self.range_cal = []
+        self.pose_list = []
 
         self.lidar_subscriber = rospy.Subscriber('/scan', LaserScan, self.lidar_callback, queue_size=10)
         rospy.Subscriber('/pf/pose/odom', Odometry, self.RobotPose)
         self.pub = rospy.Publisher('/racecar/ackermann_cmd_mux/output', AckermannDriveStamped, queue_size=10)
         self.waypoint_publisher = rospy.Publisher('/waypoints', MarkerArray, queue_size=10)
         self.velocity_msg = AckermannDriveStamped()
-        self.rate = rospy.Rate(1000)
+        self.rate = rospy.Rate(100)
         while not rospy.is_shutdown():
             start_time = time.time()
 
@@ -65,7 +66,7 @@ class BicycleMobileRobot:
             #print(self.speed,self.velocity_msg.drive.speed, loop_duration)
             self.velocity_msg.drive.speed = self.velocity_msg.drive.speed*2
             self.pub.publish(self.velocity_msg)
-            waypoints = self.generate_circle_markers(self.range_cal,self.active_waypoint, self.radius_icecone, self.start_point, self.end_point, self.pose, self.target_goal)  # Implement your waypoint generation logic
+            waypoints = self.generate_circle_markers(self.pose_list,self.range_cal,self.active_waypoint, self.radius_icecone, self.start_point, self.end_point, self.pose, self.target_goal)  # Implement your waypoint generation logic
             marker_array = MarkerArray(markers=waypoints)
             self.waypoint_publisher.publish(marker_array)
                 # Create an instance of the TurtleBot3 class
@@ -76,9 +77,35 @@ class BicycleMobileRobot:
             #start_time = time.time()
             self.rate.sleep()
 
-    def generate_circle_markers(self, range_cal,center, radius, start_point, end_point, pose, target_goal,num_points=100):
+    def generate_circle_markers(self,pose_list,range_cal,center, radius, start_point, end_point, pose, target_goal,num_points=100):
         markers = []
+        """
+        for i in range(len(pose_list)):
+            marker = Marker()
+            marker.header.frame_id = "base_link"
+            marker.id = i
+            marker.type = Marker.POINTS
+            marker.action = Marker.ADD
+            marker.pose.orientation.w = 1.0
+            marker.scale.x = 0.05  # Point size
+            marker.scale.y = 0.05
+            marker.color.a = 1.0
+            marker.color.r = 0.0
+            marker.color.g = 1.0
+            marker.color.b = 0.0
 
+            x = pose_list[i][0]
+            y = pose_list[i][1]
+            z = 0
+
+            point = Point()
+            point.x = x
+            point.y = y
+            point.z = z
+
+            marker.points.append(point)
+            markers.append(marker)
+        """
         # Generate circle markers
         for i in range(num_points):
             marker = Marker()
@@ -250,13 +277,13 @@ class BicycleMobileRobot:
             self.ranges = [self.ranges[i] for i in range(len(self.ranges)) if i % 4 == 0]
         if len(self.angles) > 271:    
             self.angles = [self.angles[i] for i in range(len(self.angles)) if i % 4 == 0]
-        for i in range(130,141):
-            if self.ranges[i]  > 0.3:
+        for i in range(0,271):
+            if self.ranges[i]  > 0.5:
                 self.ranges[i] = self.ranges[i] - 0.5
                 #print("range enc")
             else:
                 self.ranges[i] = 0.01      
-                #print("no ran")
+                print("no ran")
         #print(180/np.pi*msg.angle_min,180/np.pi*msg.angle_max)
         #print(len(self.ranges))
 
@@ -296,7 +323,7 @@ class BicycleMobileRobot:
                      print("issue")    
             else:
                 R_opt = 0
-                #print("Way2")
+            #print("Way2")
             #print("opt", R_opt, T)    
         return R_opt
 
@@ -344,7 +371,7 @@ class BicycleMobileRobot:
                                          self.angle_normalizer(self.pose[2] + self.pose[3]),
                                          self.angle_normalizer(self.pose[2])])        
     
-        
+        self.pose_list.append(self.transformedPose[0:2])
         if len(self.ranges )== 1081:
             self.ranges = [self.ranges[i] for i in range(len(self.ranges)) if i % 4 == 0]
             #print("rec ranges")
@@ -435,8 +462,8 @@ class BicycleMobileRobot:
         self.end_point = np.array([end_point_x, end_point_y]) 
         R = self.euclidean_distance(self.active_waypoint[0] ,self.active_waypoint[1], self.transformedPose[0],self.transformedPose[1])   
         #print(R,"r")   
-        K_1 = 0.1
-        K_2 = 2
+        K_1 = 0.7
+        K_2 = 0.7
         if R == 0:
              R = 0.001
         w_1 = -K_1 * np.tanh(R) * np.sign(np.cos(rel_bearing))
@@ -460,7 +487,7 @@ class BicycleMobileRobot:
                                                                      self.transformedPose[3])) / self.L, 1]]),
                             np.array([w_1, w_2]))
         omega = V[1]
-        self.steer_angle += omega*1/1000
+        self.steer_angle += omega
         
         V[0] = V[0]*np.cos(self.steer_angle)
         #print("steer angle",self.steer_angle)

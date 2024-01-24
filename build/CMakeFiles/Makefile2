@@ -57,6 +57,7 @@ all: gtest/all
 all: racecar/all
 all: racecar_control/all
 all: racecar_description/all
+all: dyn_IPC_sim/all
 all: sc649_assignment_3/all
 all: ackermann_cmd_mux/all
 all: racecar_gazebo/all
@@ -68,6 +69,7 @@ preinstall: gtest/preinstall
 preinstall: racecar/preinstall
 preinstall: racecar_control/preinstall
 preinstall: racecar_description/preinstall
+preinstall: dyn_IPC_sim/preinstall
 preinstall: sc649_assignment_3/preinstall
 preinstall: ackermann_cmd_mux/preinstall
 preinstall: racecar_gazebo/preinstall
@@ -84,6 +86,7 @@ clean: gtest/clean
 clean: racecar/clean
 clean: racecar_control/clean
 clean: racecar_description/clean
+clean: dyn_IPC_sim/clean
 clean: sc649_assignment_3/clean
 clean: ackermann_cmd_mux/clean
 clean: racecar_gazebo/clean
@@ -140,6 +143,24 @@ ackermann_cmd_mux/clean: ackermann_cmd_mux/CMakeFiles/dynamic_reconfigure_gencfg
 ackermann_cmd_mux/clean: ackermann_cmd_mux/CMakeFiles/ackermann_msgs_generate_messages_eus.dir/clean
 
 .PHONY : ackermann_cmd_mux/clean
+
+#=============================================================================
+# Directory level rules for directory dyn_IPC_sim
+
+# Recursive "all" directory target.
+dyn_IPC_sim/all:
+
+.PHONY : dyn_IPC_sim/all
+
+# Recursive "preinstall" directory target.
+dyn_IPC_sim/preinstall:
+
+.PHONY : dyn_IPC_sim/preinstall
+
+# Recursive "clean" directory target.
+dyn_IPC_sim/clean:
+
+.PHONY : dyn_IPC_sim/clean
 
 #=============================================================================
 # Directory level rules for directory gtest

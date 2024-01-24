@@ -57,6 +57,13 @@
 /home/anushka/ws/build/racecar_description/CMakeFiles/rebuild_cache.dir
 /home/anushka/ws/build/racecar_description/CMakeFiles/edit_cache.dir
 /home/anushka/ws/build/racecar_description/CMakeFiles/test.dir
+/home/anushka/ws/build/dyn_IPC_sim/CMakeFiles/install/strip.dir
+/home/anushka/ws/build/dyn_IPC_sim/CMakeFiles/install/local.dir
+/home/anushka/ws/build/dyn_IPC_sim/CMakeFiles/install.dir
+/home/anushka/ws/build/dyn_IPC_sim/CMakeFiles/list_install_components.dir
+/home/anushka/ws/build/dyn_IPC_sim/CMakeFiles/rebuild_cache.dir
+/home/anushka/ws/build/dyn_IPC_sim/CMakeFiles/edit_cache.dir
+/home/anushka/ws/build/dyn_IPC_sim/CMakeFiles/test.dir
 /home/anushka/ws/build/sc649_assignment_3/CMakeFiles/install/strip.dir
 /home/anushka/ws/build/sc649_assignment_3/CMakeFiles/install/local.dir
 /home/anushka/ws/build/sc649_assignment_3/CMakeFiles/edit_cache.dir

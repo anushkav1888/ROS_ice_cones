@@ -1,2 +1,2 @@
-ackermann_cmd_mux:racecar:racecar_control:racecar_description:racecar_gazebo:sc649_assignment_3
+ackermann_cmd_mux:dyn_IPC_sim:racecar:racecar_control:racecar_description:racecar_gazebo:sc649_assignment_3
 -DCATKIN_DEVEL_PREFIX=/home/anushka/ws/devel -DCMAKE_INSTALL_PREFIX=/home/anushka/ws/install -G Unix Makefiles
