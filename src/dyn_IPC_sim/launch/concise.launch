@@ -1,0 +1,28 @@
+<launch>
+  
+  <arg name="model" default="burger"/>
+  <arg name="first_tb3"  default="tb3_0"/>
+  <arg name="second_tb3" default="tb3_1"/>
+  <arg name="third_tb3"  default="tb3_2"/>
+  <arg name="fourth_tb3"  default="tb3_3"/>
+  <arg name="fifth_tb3"  default="tb3_4"/>
+  <arg name="sixth_tb3"  default="tb3_5"/>
+  
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <!-- <arg name="world_name" value="$(find turtlebot3_gazebo)/worlds/turtlebot3_house.world"/> -->
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>  
+
+  <include file="$(find dyn_IPC_sim)/launch/turtle.launch">
+    <arg namespace="first">
+    <arg name="x_pos" default="2.25"/>
+    <arg name="y_pos" default="0"/>
+    <arg name="z_pos" default="0.0"/>
+    <arg name="yaw"   default="0.0"/>
+  </include>  
+<node name = "multi_robot_controller" pkg="dyn_IPC_sim" type ="MultiIPC_Gazebo.py" output="screen" />
+</launch>

@@ -226,25 +226,50 @@ def main():
     rospy.init_node('multi_robot_controller')
 
     # Create an instance of the TurtleBot3 class
-    turtlebot3_0 = RobotBase('tb3_0')
-    turtlebot3_1 = RobotBase('tb3_1')
-    turtlebot3_2 = RobotBase('tb3_2')
-    turtlebot3_3 = RobotBase('tb3_3')
-    turtlebot3_4 = RobotBase('tb3_4')
+    t0 = RobotBase('tb3_0')
+    t1 = RobotBase('tb3_1')
+    t2 = RobotBase('tb3_2')
+    t3 = RobotBase('tb3_3')
+    t4 = RobotBase('tb3_4')
+    t5 = RobotBase('tb3_5')
+    t6 = RobotBase('tb3_6')
+    t7 = RobotBase('tb3_7')
+    t8 = RobotBase('tb3_8')
+    t9 = RobotBase('tb3_9')
+    t10 = RobotBase('tb3_10')
     #turtlebot3_2 = RobotBase('/tb3_2')
-
-    rate = rospy.Rate(10)  # 10 Hz control loop
+    goals = [
+        [-10, 0],
+        [-6, 0.5],
+        [0.0, 0.2],
+        [-10.0, 0.75],
+        [-10.0, 1.25],
+        [-0.5, -1.0],
+        [-0.9, -1.5],
+        [-0.1, 0.0],
+        [-1.5, -1.5],
+        [-0.75, 1.5],
+    ]
+    rate = rospy.Rate(10) 
+ # 10 Hz control loop
 
     while not rospy.is_shutdown():
         # Update the TurtleBot3's control logic
-        turtlebot3_0.controller([-1.75,0])
-        turtlebot3_1.controller([-0.25,0.5])
-        turtlebot3_2.controller([1.0,0.2])
-        turtlebot3_3.controller([-1.0,0.75])
-        turtlebot3_4.controller([-1.0,1.25])
+        
+            t1.controller(goals[0])
+            t2.controller(goals[1])
+            t3.controller(goals[2])
+            t4.controller(goals[3])
+            t5.controller(goals[4])
+            t6.controller(goals[5])
+            t7.controller(goals[6])
+            t8.controller(goals[7])
+            t9.controller(goals[8])
+            t10.controller(goals[9])
+
         #turtlebot3_2.controller([0.4,0.25])[2.3272528804546586, -0.7769478402048842]
 
-        rate.sleep()
+            rate.sleep()
 
 
 if __name__ == '__main__':
