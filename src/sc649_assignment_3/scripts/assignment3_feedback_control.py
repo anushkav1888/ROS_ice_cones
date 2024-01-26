@@ -29,7 +29,7 @@ class BicycleMobileRobot:
         self.angles = []
         start_time = time.time()
         self.speed = 0
-        self.target_goal = [10,0 ,0]
+        self.target_goal = [15, 0,0]
         self.linear_velocity_x = 0
         self.linear_velocity_y = 0
         self.angular_velocity_z = 0
@@ -44,7 +44,7 @@ class BicycleMobileRobot:
         self.pub = rospy.Publisher('/racecar/ackermann_cmd_mux/output', AckermannDriveStamped, queue_size=10)
         self.waypoint_publisher = rospy.Publisher('/waypoints', MarkerArray, queue_size=10)
         self.velocity_msg = AckermannDriveStamped()
-        self.rate = rospy.Rate(1000)
+        self.rate = rospy.Rate(500)
         while not rospy.is_shutdown():
             start_time = time.time()
 
@@ -63,7 +63,7 @@ class BicycleMobileRobot:
             #[self.velocity_msg.drive.speed, self.velocity_msg.drive.steering_angle] = self.ipc_navigate(
              #self.target_goal)
             loop_duration = time.time() - start_time
-            #print(self.speed,self.velocity_msg.drive.speed, loop_duration)
+            print(self.speed,self.velocity_msg.drive.speed, loop_duration)
             self.velocity_msg.drive.speed = self.velocity_msg.drive.speed*2
             self.pub.publish(self.velocity_msg)
             waypoints = self.generate_circle_markers(self.pose_list,self.range_cal,self.active_waypoint, self.radius_icecone, self.start_point, self.end_point, self.pose, self.target_goal)  # Implement your waypoint generation logic
@@ -73,7 +73,7 @@ class BicycleMobileRobot:
 
             #print(time.time())
             # Print the loop duration
-            print(f"Loop Time: {loop_duration:.6f} seconds")
+            #print(f"Loop Time: {loop_duration:.6f} seconds")
             #start_time = time.time()
             self.rate.sleep()
 
@@ -114,8 +114,8 @@ class BicycleMobileRobot:
             marker.type = Marker.POINTS
             marker.action = Marker.ADD
             marker.pose.orientation.w = 1.0
-            marker.scale.x = 0.05  # Point size
-            marker.scale.y = 0.05
+            marker.scale.x = 0.2 # Point size
+            marker.scale.y = 0.2
             marker.color.a = 1.0
             marker.color.r = 0.0
             marker.color.g = 1.0
@@ -184,7 +184,7 @@ class BicycleMobileRobot:
 
         line_marker.points.append(point1)
         line_marker.points.append(point2)
-        line_marker.scale.x = 0.05  # Line width
+        line_marker.scale.x = 0.2  # Line width
         line_marker.color.a = 1.0
         line_marker.color.r = 0.0
         line_marker.color.g = 0.0
@@ -204,7 +204,7 @@ class BicycleMobileRobot:
 
         line_marker_2.points.append(point3)
         line_marker_2.points.append(point4)
-        line_marker_2.scale.x = 0.05  # Line width
+        line_marker_2.scale.x = 0.2  # Line width
         line_marker_2.color.a = 1.0
         line_marker_2.color.r = 0.0
         line_marker_2.color.g = 1.0
@@ -273,12 +273,12 @@ class BicycleMobileRobot:
         self.angles = np.linspace(msg.angle_min, msg.angle_max, len(msg.ranges))
         self.min_angle = msg.angle_min
         self.max_angle = msg.angle_max
-        if len(self.ranges) >135:
-            self.ranges = [self.ranges[i] for i in range(len(self.ranges)) if i % 8 == 0]
-        if len(self.angles) > 135:    
-            self.angles = [self.angles[i] for i in range(len(self.angles)) if i % 8 == 0]
-        for i in range(0,136):
-            #print(len(self.ranges))
+        if len(self.ranges) >120:
+            self.ranges = [self.ranges[i] for i in range(len(self.ranges)) if i % 9 == 0]
+        if len(self.angles) > 120:    
+            self.angles = [self.angles[i] for i in range(len(self.angles)) if i % 9 == 0]
+        for i in range(0,121):
+            #print(self.ranges)
             if self.ranges[i]  > 0.5:
                 self.ranges[i] = self.ranges[i] - 0.5
                 #print("range enc")
@@ -308,9 +308,9 @@ class BicycleMobileRobot:
         return out
     
     def R_optimizer(self, int_goal_x, int_goal_y, Robot_x, Robot_y, T, R_max, angles, ranges, pose):
-        angle_diff = angles[T+67]+pose - np.arctan2(int_goal_y, int_goal_x)
+        angle_diff = angles[T+59]+pose - np.arctan2(int_goal_y, int_goal_x)
         R_opt = 0
-        if T <= 33 and T >= -33:
+        if T <= 30 and T >= -29:
             if np.cos(angle_diff) > 0:
                 distance_to_goal = self.euclidean_distance(int_goal_x, int_goal_y, Robot_x, Robot_y)
                 if distance_to_goal * np.cos(angle_diff) >= R_max:
@@ -331,7 +331,7 @@ class BicycleMobileRobot:
         #lim_left = np.argmin(np.abs(np.array(angles) + np.pi*3/8)) #left index for ice cone to be lidar range
         #lim_right = np.argmin(np.abs(np.array(angles) - np.pi*3/8)) 
         #robot_index = int(np.where(np.array(angles)==0)(0))
-        robot_index = 67
+        robot_index = 29
         #print(robot_index,"rob")
         N = len(ranges)
         del_theta = 3/2*np.pi/N
@@ -348,9 +348,9 @@ class BicycleMobileRobot:
         #print("l",len(ranges))
         x_ref = ranges[robot_index+T]
         #print(lim_right-135,"lim")
-        if T > 33 or T < -33:
+        if T > 30 or T < -29:
             x_ref = 0    
-        elif T <= 33 and T >= -33:
+        elif T <= 30 and T >= -29:
             if T > 0:
                     for i in np.array(range(0, 2*T)):  # moving till N and then to end_index which is in the first quadrant
                         #print(2*T)
@@ -368,6 +368,7 @@ class BicycleMobileRobot:
                                                                 np.sqrt((-np.cos(theta)**2 + (np.cos(theta + i * del_theta))**2)))
                                             if np.imag(x_ref) != 0:
                                                 print(227)                
+        print(x_ref,"x")
         return x_ref, I
                           
                                                              
@@ -390,8 +391,8 @@ class BicycleMobileRobot:
         R_max = np.zeros(len(self.ranges))
         R_opt = np.zeros(len(self.ranges))
         D_check = np.zeros(len(self.ranges))
-        for T in np.array(range(-67,68)):  
-            if len(D_check)== 135:
+        for T in np.array(range(-59,61)):  
+            if len(D_check)== 121:
                 break   
             #if len(self.ranges )!= 135:
                 #self.ranges = [self.ranges[i] for i in range(len(self.ranges)) if i % 8 == 0]
@@ -401,12 +402,12 @@ class BicycleMobileRobot:
                 #print("len angles", len(self.angles),"ipc")
              #   self.angles = [self.angles[i] for i in range(len(self.angles)) if i % 8 == 0]
 
-            R_max[T+67], _ = self.sensor_data_process(self.ranges, T, self.transformedPose[2],self.angles)
-            R_opt[T+67] = self.R_optimizer(target_goal[0], target_goal[1], self.transformedPose[0], self.transformedPose[1], T, R_max[T+67],
+            R_max[T+29], _ = self.sensor_data_process(self.ranges, T, self.transformedPose[2],self.angles)
+            R_opt[T+29] = self.R_optimizer(target_goal[0], target_goal[1], self.transformedPose[0], self.transformedPose[1], T, R_max[T+29],
                                    self.angles, self.ranges,self.pose[2])
-            D_check[T+67] = self.euclidean_distance(target_goal[0], target_goal[1],
-                                            self.transformedPose[0] + R_opt[T+67] * np.cos(self.angles[T+67]+self.pose[2]),
-                                            self.transformedPose[1] + R_opt[T+67] * np.sin(self.angles[T+67]+self.pose[2]))
+            D_check[T+29] = self.euclidean_distance(target_goal[0], target_goal[1],
+                                            self.transformedPose[0] + R_opt[T+29] * np.cos(self.angles[T+29]+self.pose[2]),
+                                            self.transformedPose[1] + R_opt[T+29] * np.sin(self.angles[T+29]+self.pose[2]))
             #if T > -67 and T < 67 :
                 
                 #print(T,R_opt[T+135] * np.cos(self.angles[T]+self.pose[2]))
@@ -416,7 +417,7 @@ class BicycleMobileRobot:
         self.range_cal = R_max    
         #print(R_max,"rmax", R_opt)
         #print(D_check[68:203])    
-        i_best = 32+np.argmin(D_check[33:67])
+        i_best = 30+np.argmin(D_check[31:90])
         #if i_best <67 or i_best > 202:
          #  print("isssue")
         #if R_opt[i_best] == 0:
@@ -468,10 +469,10 @@ class BicycleMobileRobot:
         self.end_point = np.array([end_point_x, end_point_y]) 
         R = self.euclidean_distance(self.active_waypoint[0] ,self.active_waypoint[1], self.transformedPose[0],self.transformedPose[1])   
         #print(R,"r")   
-        K_1 = 0.3
-        K_2 = 0.9
+        K_1 = 5
+        K_2 = 10
         if R == 0:
-             R = 0.0000000000000000000000000001
+             R = 0.00000000000000000001
         w_1 = -K_1 * np.tanh(R) * np.sign(np.cos(rel_bearing))
         w_2 = -K_2 * np.sign(sigma) * np.sqrt(np.abs(sigma))+ (w_1 / R) * np.sin(rel_bearing)
         #print(w_1,"w1")
@@ -493,12 +494,14 @@ class BicycleMobileRobot:
                                                                      self.transformedPose[3])) / self.L, 1]]),
                             np.array([w_1, w_2]))
         omega = V[1]
-        self.steer_angle += omega*0.1
+        self.steer_angle += omega*1
         if self.steer_angle > 40*np.pi/180:
             self.steer_angle = 40*np.pi/180
         if self.steer_angle < - 40*np.pi/180:
             self.steer_angle = -40*np.pi/180    
-        V[0] = V[0]*np.cos(self.steer_angle)
+
+        V[0] = V[0]*np.cos(self.steer_angle)*100
+
         #print("steer angle",self.steer_angle)
         #print(V[0])
         self.controls = np.array([V[0], self.steer_angle])
