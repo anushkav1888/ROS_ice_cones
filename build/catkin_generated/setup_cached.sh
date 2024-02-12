@@ -7,7 +7,10 @@
 # new environment variables
 
 # modified environment variables
-export LD_LIBRARY_PATH='/opt/ros/noetic/lib:/opt/ros/noetic/lib/x86_64-linux-gnu'
-export PKG_CONFIG_PATH='/opt/ros/noetic/lib/pkgconfig:/opt/ros/noetic/lib/x86_64-linux-gnu/pkgconfig'
+export CMAKE_PREFIX_PATH="/home/anushka/ws/devel:$CMAKE_PREFIX_PATH"
+export LD_LIBRARY_PATH="/home/anushka/ws/devel/lib:$LD_LIBRARY_PATH"
+export PKG_CONFIG_PATH="/home/anushka/ws/devel/lib/pkgconfig:$PKG_CONFIG_PATH"
 export PWD='/home/anushka/ws/build'
-export PYTHONPATH='/opt/ros/noetic/lib/python3/dist-packages'
+export PYTHONPATH="/home/anushka/ws/devel/lib/python3/dist-packages:$PYTHONPATH"
+export ROSLISP_PACKAGE_DIRECTORIES='/home/anushka/ws/devel/share/common-lisp'
+export ROS_PACKAGE_PATH="/home/anushka/ws/src:$ROS_PACKAGE_PATH"

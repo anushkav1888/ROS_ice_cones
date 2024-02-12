@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/anushka/ws/install/lib;/home/anushka/ws/devel/lib;/opt/ros/noetic/lib)
+    foreach(path /home/anushka/ws/install/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
@@ -177,7 +177,7 @@ foreach(library ${libraries})
   endif()
 endforeach()
 
-set(catvehicle_EXPORTED_TARGETS "")
+set(catvehicle_EXPORTED_TARGETS "catvehicle_generate_messages_cpp;catvehicle_generate_messages_eus;catvehicle_generate_messages_lisp;catvehicle_generate_messages_nodejs;catvehicle_generate_messages_py")
 # create dummy targets for exported code generation targets to make life of users easier
 foreach(t ${catvehicle_EXPORTED_TARGETS})
   if(NOT TARGET ${t})
@@ -185,7 +185,7 @@ foreach(t ${catvehicle_EXPORTED_TARGETS})
   endif()
 endforeach()
 
-set(depends "geometry_msgs;roscpp;rospy;sensor_msgs;std_msgs;velodyne_pointcloud;tf")
+set(depends "geometry_msgs;roscpp;rospy;sensor_msgs;std_msgs;velodyne_pointcloud;tf;message_runtime")
 foreach(depend ${depends})
   string(REPLACE " " ";" depend_list ${depend})
   # the package name of the dependency must be kept in a unique variable so that it is not overwritten in recursive calls
@@ -214,7 +214,7 @@ foreach(depend ${depends})
   _list_append_deduplicate(catvehicle_EXPORTED_TARGETS ${${catvehicle_dep}_EXPORTED_TARGETS})
 endforeach()
 
-set(pkg_cfg_extras "")
+set(pkg_cfg_extras "catvehicle-msg-extras.cmake")
 foreach(extra ${pkg_cfg_extras})
   if(NOT IS_ABSOLUTE ${extra})
     set(extra ${catvehicle_DIR}/${extra})

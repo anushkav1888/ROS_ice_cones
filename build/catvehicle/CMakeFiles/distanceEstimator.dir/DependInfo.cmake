@@ -21,6 +21,7 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
+  "/home/anushka/ws/devel/include"
   "/usr/lib/x86_64-linux-gnu/pkgconfig/../../../include/gazebo-11"
   "/usr/lib/x86_64-linux-gnu/pkgconfig/../../../include/sdformat-9.10"
   "/usr/lib/x86_64-linux-gnu/pkgconfig/../../../include/ignition/fuel_tools4"
@@ -33,7 +34,6 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/usr/lib/x86_64-linux-gnu/pkgconfig/../../../include/ignition/cmake2"
   "/home/anushka/ws/src/catvehicle/include"
   "/home/anushka/ws/src/catvehicle/include/catvehicle"
-  "/home/anushka/ws/devel/include"
   "/home/anushka/ws/src/control_toolbox/include"
   "/home/anushka/ws/src/sicktoolbox/include"
   "/opt/ros/noetic/include"
