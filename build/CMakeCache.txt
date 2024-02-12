@@ -20,6 +20,16 @@ BUILD_GMOCK:BOOL=ON
 //Build dynamically-linked binaries
 BUILD_SHARED_LIBS:BOOL=ON
 
+//The directory containing a CMake configuration file for Boost.
+Boost_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/Boost-1.71.0
+
+//Path to a file.
+Boost_INCLUDE_DIR:PATH=/usr/include
+
+Boost_SYSTEM_LIBRARY_RELEASE:STRING=/usr/lib/x86_64-linux-gnu/libboost_system.so.1.71.0
+
+Boost_THREAD_LIBRARY_RELEASE:STRING=/usr/lib/x86_64-linux-gnu/libboost_thread.so.1.71.0
+
 //List of ';' separated packages to exclude
 CATKIN_BLACKLIST_PACKAGES:STRING=
 
@@ -382,6 +392,21 @@ SETUPTOOLS_DEB_LAYOUT:BOOL=ON
 //Name of the computer/site where compile is being run
 SITE:STRING=anushka-ASUS-TUF-Gaming-A15-FA506IC-FA506IC
 
+//Dependencies for the target
+SickLD_LIB_DEPENDS:STATIC=general;-lpthread;
+
+//Dependencies for the target
+SickLMS1xx_LIB_DEPENDS:STATIC=general;-lpthread;
+
+//Dependencies for the target
+SickLMS2xx_LIB_DEPENDS:STATIC=general;-lpthread;
+
+//Path to a file.
+TinyXML_INCLUDE_DIR:PATH=/usr/include
+
+//Path to a library.
+TinyXML_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libtinyxml.so
+
 //LSB Distrib tag
 UBUNTU:BOOL=TRUE
 
@@ -418,20 +443,86 @@ actionlib_DIR:PATH=/opt/ros/noetic/share/actionlib/cmake
 //The directory containing a CMake configuration file for actionlib_msgs.
 actionlib_msgs_DIR:PATH=/opt/ros/noetic/share/actionlib_msgs/cmake
 
+//The directory containing a CMake configuration file for angles.
+angles_DIR:PATH=/opt/ros/noetic/share/angles/cmake
+
 //The directory containing a CMake configuration file for bond.
 bond_DIR:PATH=/opt/ros/noetic/share/bond/cmake
 
 //The directory containing a CMake configuration file for bondcpp.
 bondcpp_DIR:PATH=/opt/ros/noetic/share/bondcpp/cmake
 
+//The directory containing a CMake configuration file for boost_atomic.
+boost_atomic_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/boost_atomic-1.71.0
+
+//The directory containing a CMake configuration file for boost_headers.
+boost_headers_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/boost_headers-1.71.0
+
+//The directory containing a CMake configuration file for boost_system.
+boost_system_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/boost_system-1.71.0
+
+//The directory containing a CMake configuration file for boost_thread.
+boost_thread_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/boost_thread-1.71.0
+
 //The directory containing a CMake configuration file for catkin.
 catkin_DIR:PATH=/opt/ros/noetic/share/catkin/cmake
+
+//Dependencies for the target
+catmin_distance_LIB_DEPENDS:STATIC=general;gazebo_transport;general;gazebo_physics;general;gazebo_sensors;general;gazebo_rendering;general;gazebo_gui;general;gazebo_client;general;gazebo_msgs;general;gazebo_common;general;gazebo;general;boost_thread;general;boost_system;general;boost_filesystem;general;boost_program_options;general;boost_regex;general;boost_iostreams;general;boost_date_time;general;sdformat9;general;tbb;general;atomic;general;ignition-fuel_tools4;general;ignition-transport8;general;ignition-msgs5;general;protobuf;general;ignition-math6;general;/opt/ros/noetic/lib/libgazebo_ros_control.so;general;/opt/ros/noetic/lib/libdefault_robot_hw_sim.so;general;/opt/ros/noetic/lib/libcontroller_manager.so;general;/opt/ros/noetic/lib/libposition_controllers.so;general;SickLD;general;SickLMS1xx;general;SickLMS2xx;general;/opt/ros/noetic/lib/libtransmission_interface_parser.so;general;/opt/ros/noetic/lib/libtransmission_interface_loader.so;general;/opt/ros/noetic/lib/libtransmission_interface_loader_plugins.so;general;/opt/ros/noetic/lib/libvelocity_controllers.so;general;control_toolbox;general;/opt/ros/noetic/lib/librealtime_tools.so;general;/opt/ros/noetic/lib/liburdf.so;general;/usr/lib/x86_64-linux-gnu/liburdfdom_sensor.so;general;/usr/lib/x86_64-linux-gnu/liburdfdom_model_state.so;general;/usr/lib/x86_64-linux-gnu/liburdfdom_model.so;general;/usr/lib/x86_64-linux-gnu/liburdfdom_world.so;general;/usr/lib/x86_64-linux-gnu/libtinyxml.so;general;/opt/ros/noetic/lib/librosconsole_bridge.so;general;/opt/ros/noetic/lib/libvelodyne_rawdata.so;general;/opt/ros/noetic/lib/libdata_containers.so;general;/opt/ros/noetic/lib/libvelodyne_input.so;general;/opt/ros/noetic/lib/libnodeletlib.so;general;/opt/ros/noetic/lib/libbondcpp.so;general;/usr/lib/x86_64-linux-gnu/libuuid.so;general;/opt/ros/noetic/lib/libclass_loader.so;general;/usr/lib/x86_64-linux-gnu/libPocoFoundation.so;general;/usr/lib/x86_64-linux-gnu/libdl.so;general;/opt/ros/noetic/lib/libroslib.so;general;/opt/ros/noetic/lib/librospack.so;general;/usr/lib/x86_64-linux-gnu/libpython3.8.so;general;/usr/lib/x86_64-linux-gnu/libboost_program_options.so.1.71.0;general;/usr/lib/x86_64-linux-gnu/libtinyxml2.so;general;/opt/ros/noetic/lib/libtf.so;general;/opt/ros/noetic/lib/libtf2_ros.so;general;/opt/ros/noetic/lib/libactionlib.so;general;/opt/ros/noetic/lib/libmessage_filters.so;general;/opt/ros/noetic/lib/libtf2.so;general;/opt/ros/noetic/lib/libdynamic_reconfigure_config_init_mutex.so;general;/opt/ros/noetic/lib/libdiagnostic_updater.so;general;/opt/ros/noetic/lib/libroscpp.so;general;/usr/lib/x86_64-linux-gnu/libpthread.so;general;/usr/lib/x86_64-linux-gnu/libboost_chrono.so.1.71.0;general;/usr/lib/x86_64-linux-gnu/libboost_filesystem.so.1.71.0;general;/opt/ros/noetic/lib/librosconsole.so;general;/opt/ros/noetic/lib/librosconsole_log4cxx.so;general;/opt/ros/noetic/lib/librosconsole_backend_interface.so;general;/usr/lib/x86_64-linux-gnu/liblog4cxx.so;general;/usr/lib/x86_64-linux-gnu/libboost_regex.so.1.71.0;general;/opt/ros/noetic/lib/libxmlrpcpp.so;general;/opt/ros/noetic/lib/libroscpp_serialization.so;general;/opt/ros/noetic/lib/librostime.so;general;/usr/lib/x86_64-linux-gnu/libboost_date_time.so.1.71.0;general;/opt/ros/noetic/lib/libcpp_common.so;general;/usr/lib/x86_64-linux-gnu/libboost_system.so.1.71.0;general;/usr/lib/x86_64-linux-gnu/libboost_thread.so.1.71.0;general;/usr/lib/x86_64-linux-gnu/libconsole_bridge.so.0.4;general;Boost::system;
+
+//Value Computed by CMake
+catvehicle_BINARY_DIR:STATIC=/home/anushka/ws/build/catvehicle
+
+//Value Computed by CMake
+catvehicle_SOURCE_DIR:STATIC=/home/anushka/ws/src/catvehicle
+
+//Dependencies for the target
+catvehiclegazebo_LIB_DEPENDS:STATIC=general;gazebo_transport;general;gazebo_physics;general;gazebo_sensors;general;gazebo_rendering;general;gazebo_gui;general;gazebo_client;general;gazebo_msgs;general;gazebo_common;general;gazebo;general;boost_thread;general;boost_system;general;boost_filesystem;general;boost_program_options;general;boost_regex;general;boost_iostreams;general;boost_date_time;general;sdformat9;general;tbb;general;atomic;general;ignition-fuel_tools4;general;ignition-transport8;general;ignition-msgs5;general;protobuf;general;ignition-math6;general;/opt/ros/noetic/lib/libgazebo_ros_control.so;general;/opt/ros/noetic/lib/libdefault_robot_hw_sim.so;general;/opt/ros/noetic/lib/libcontroller_manager.so;general;/opt/ros/noetic/lib/libposition_controllers.so;general;SickLD;general;SickLMS1xx;general;SickLMS2xx;general;/opt/ros/noetic/lib/libtransmission_interface_parser.so;general;/opt/ros/noetic/lib/libtransmission_interface_loader.so;general;/opt/ros/noetic/lib/libtransmission_interface_loader_plugins.so;general;/opt/ros/noetic/lib/libvelocity_controllers.so;general;control_toolbox;general;/opt/ros/noetic/lib/librealtime_tools.so;general;/opt/ros/noetic/lib/liburdf.so;general;/usr/lib/x86_64-linux-gnu/liburdfdom_sensor.so;general;/usr/lib/x86_64-linux-gnu/liburdfdom_model_state.so;general;/usr/lib/x86_64-linux-gnu/liburdfdom_model.so;general;/usr/lib/x86_64-linux-gnu/liburdfdom_world.so;general;/usr/lib/x86_64-linux-gnu/libtinyxml.so;general;/opt/ros/noetic/lib/librosconsole_bridge.so;general;/opt/ros/noetic/lib/libvelodyne_rawdata.so;general;/opt/ros/noetic/lib/libdata_containers.so;general;/opt/ros/noetic/lib/libvelodyne_input.so;general;/opt/ros/noetic/lib/libnodeletlib.so;general;/opt/ros/noetic/lib/libbondcpp.so;general;/usr/lib/x86_64-linux-gnu/libuuid.so;general;/opt/ros/noetic/lib/libclass_loader.so;general;/usr/lib/x86_64-linux-gnu/libPocoFoundation.so;general;/usr/lib/x86_64-linux-gnu/libdl.so;general;/opt/ros/noetic/lib/libroslib.so;general;/opt/ros/noetic/lib/librospack.so;general;/usr/lib/x86_64-linux-gnu/libpython3.8.so;general;/usr/lib/x86_64-linux-gnu/libboost_program_options.so.1.71.0;general;/usr/lib/x86_64-linux-gnu/libtinyxml2.so;general;/opt/ros/noetic/lib/libtf.so;general;/opt/ros/noetic/lib/libtf2_ros.so;general;/opt/ros/noetic/lib/libactionlib.so;general;/opt/ros/noetic/lib/libmessage_filters.so;general;/opt/ros/noetic/lib/libtf2.so;general;/opt/ros/noetic/lib/libdynamic_reconfigure_config_init_mutex.so;general;/opt/ros/noetic/lib/libdiagnostic_updater.so;general;/opt/ros/noetic/lib/libroscpp.so;general;/usr/lib/x86_64-linux-gnu/libpthread.so;general;/usr/lib/x86_64-linux-gnu/libboost_chrono.so.1.71.0;general;/usr/lib/x86_64-linux-gnu/libboost_filesystem.so.1.71.0;general;/opt/ros/noetic/lib/librosconsole.so;general;/opt/ros/noetic/lib/librosconsole_log4cxx.so;general;/opt/ros/noetic/lib/librosconsole_backend_interface.so;general;/usr/lib/x86_64-linux-gnu/liblog4cxx.so;general;/usr/lib/x86_64-linux-gnu/libboost_regex.so.1.71.0;general;/opt/ros/noetic/lib/libxmlrpcpp.so;general;/opt/ros/noetic/lib/libroscpp_serialization.so;general;/opt/ros/noetic/lib/librostime.so;general;/usr/lib/x86_64-linux-gnu/libboost_date_time.so.1.71.0;general;/opt/ros/noetic/lib/libcpp_common.so;general;/usr/lib/x86_64-linux-gnu/libboost_system.so.1.71.0;general;/usr/lib/x86_64-linux-gnu/libboost_thread.so.1.71.0;general;/usr/lib/x86_64-linux-gnu/libconsole_bridge.so.0.4;general;Boost::system;
 
 //The directory containing a CMake configuration file for class_loader.
 class_loader_DIR:PATH=/opt/ros/noetic/share/class_loader/cmake
 
+//The directory containing a CMake configuration file for cmake_modules.
+cmake_modules_DIR:PATH=/opt/ros/noetic/share/cmake_modules/cmake
+
+//Value Computed by CMake
+cmdvel2gazebo_BINARY_DIR:STATIC=/home/anushka/ws/build/cmdvel2gazebo
+
+//Value Computed by CMake
+cmdvel2gazebo_SOURCE_DIR:STATIC=/home/anushka/ws/src/cmdvel2gazebo
+
+//The directory containing a CMake configuration file for control_msgs.
+control_msgs_DIR:PATH=/opt/ros/noetic/share/control_msgs/cmake
+
+//Value Computed by CMake
+control_toolbox_BINARY_DIR:STATIC=/home/anushka/ws/build/control_toolbox
+
+//The directory containing a CMake configuration file for control_toolbox.
+control_toolbox_DIR:PATH=/home/anushka/ws/devel/share/control_toolbox/cmake
+
+//Dependencies for the target
+control_toolbox_LIB_DEPENDS:STATIC=general;/usr/lib/x86_64-linux-gnu/libtinyxml.so;general;/opt/ros/noetic/lib/libdynamic_reconfigure_config_init_mutex.so;general;/opt/ros/noetic/lib/librealtime_tools.so;general;/opt/ros/noetic/lib/libroscpp.so;general;/usr/lib/x86_64-linux-gnu/libpthread.so;general;/usr/lib/x86_64-linux-gnu/libboost_chrono.so.1.71.0;general;/usr/lib/x86_64-linux-gnu/libboost_filesystem.so.1.71.0;general;/opt/ros/noetic/lib/librosconsole.so;general;/opt/ros/noetic/lib/librosconsole_log4cxx.so;general;/opt/ros/noetic/lib/librosconsole_backend_interface.so;general;/usr/lib/x86_64-linux-gnu/liblog4cxx.so;general;/usr/lib/x86_64-linux-gnu/libboost_regex.so.1.71.0;general;/opt/ros/noetic/lib/libxmlrpcpp.so;general;/opt/ros/noetic/lib/libroscpp_serialization.so;general;/opt/ros/noetic/lib/librostime.so;general;/usr/lib/x86_64-linux-gnu/libboost_date_time.so.1.71.0;general;/opt/ros/noetic/lib/libcpp_common.so;general;/usr/lib/x86_64-linux-gnu/libboost_system.so.1.71.0;general;/usr/lib/x86_64-linux-gnu/libboost_thread.so.1.71.0;general;/usr/lib/x86_64-linux-gnu/libconsole_bridge.so.0.4;general;Boost::system;general;Boost::thread;
+
+//Value Computed by CMake
+control_toolbox_SOURCE_DIR:STATIC=/home/anushka/ws/src/control_toolbox
+
+//The directory containing a CMake configuration file for controller_interface.
+controller_interface_DIR:PATH=/opt/ros/noetic/share/controller_interface/cmake
+
+//The directory containing a CMake configuration file for controller_manager.
+controller_manager_DIR:PATH=/opt/ros/noetic/share/controller_manager/cmake
+
+//The directory containing a CMake configuration file for controller_manager_msgs.
+controller_manager_msgs_DIR:PATH=/opt/ros/noetic/share/controller_manager_msgs/cmake
+
 //The directory containing a CMake configuration file for cpp_common.
 cpp_common_DIR:PATH=/opt/ros/noetic/share/cpp_common/cmake
+
+//The directory containing a CMake configuration file for diagnostic_msgs.
+diagnostic_msgs_DIR:PATH=/opt/ros/noetic/share/diagnostic_msgs/cmake
+
+//The directory containing a CMake configuration file for diagnostic_updater.
+diagnostic_updater_DIR:PATH=/opt/ros/noetic/share/diagnostic_updater/cmake
 
 //Value Computed by CMake
 dyn_IPC_sim_BINARY_DIR:STATIC=/home/anushka/ws/build/dyn_IPC_sim
@@ -442,11 +533,17 @@ dyn_IPC_sim_SOURCE_DIR:STATIC=/home/anushka/ws/src/dyn_IPC_sim
 //The directory containing a CMake configuration file for dynamic_reconfigure.
 dynamic_reconfigure_DIR:PATH=/opt/ros/noetic/share/dynamic_reconfigure/cmake
 
+//The directory containing a CMake configuration file for forward_command_controller.
+forward_command_controller_DIR:PATH=/opt/ros/noetic/share/forward_command_controller/cmake
+
 //The directory containing a CMake configuration file for gazebo_msgs.
 gazebo_msgs_DIR:PATH=/opt/ros/noetic/share/gazebo_msgs/cmake
 
 //The directory containing a CMake configuration file for gazebo_ros.
 gazebo_ros_DIR:PATH=/opt/ros/noetic/share/gazebo_ros/cmake
+
+//The directory containing a CMake configuration file for gazebo_ros_control.
+gazebo_ros_control_DIR:PATH=/opt/ros/noetic/share/gazebo_ros_control/cmake
 
 //The directory containing a CMake configuration file for gencpp.
 gencpp_DIR:PATH=/opt/ros/noetic/share/gencpp/cmake
@@ -515,8 +612,14 @@ gtest_hide_internal_symbols:BOOL=OFF
 //Dependencies for the target
 gtest_main_LIB_DEPENDS:STATIC=general;gtest;
 
+//The directory containing a CMake configuration file for hardware_interface.
+hardware_interface_DIR:PATH=/opt/ros/noetic/share/hardware_interface/cmake
+
+//The directory containing a CMake configuration file for joint_limits_interface.
+joint_limits_interface_DIR:PATH=/opt/ros/noetic/share/joint_limits_interface/cmake
+
 //Path to a library.
-lib:FILEPATH=/opt/ros/noetic/lib/libdynamic_reconfigure_config_init_mutex.so
+lib:FILEPATH=/opt/ros/noetic/lib/libvelodyne_input.so
 
 //The directory containing a CMake configuration file for message_filters.
 message_filters_DIR:PATH=/opt/ros/noetic/share/message_filters/cmake
@@ -530,11 +633,92 @@ message_runtime_DIR:PATH=/opt/ros/noetic/share/message_runtime/cmake
 //The directory containing a CMake configuration file for nodelet.
 nodelet_DIR:PATH=/opt/ros/noetic/share/nodelet/cmake
 
+//Value Computed by CMake
+obstaclestopper_BINARY_DIR:STATIC=/home/anushka/ws/build/obstaclestopper
+
+//Value Computed by CMake
+obstaclestopper_SOURCE_DIR:STATIC=/home/anushka/ws/src/obstaclestopper
+
+//Path to a library.
+pkgcfg_lib_GAZEBO_atomic:FILEPATH=pkgcfg_lib_GAZEBO_atomic-NOTFOUND
+
+//Path to a library.
+pkgcfg_lib_GAZEBO_boost_date_time:FILEPATH=/usr/lib/x86_64-linux-gnu/libboost_date_time.so
+
+//Path to a library.
+pkgcfg_lib_GAZEBO_boost_filesystem:FILEPATH=/usr/lib/x86_64-linux-gnu/libboost_filesystem.so
+
+//Path to a library.
+pkgcfg_lib_GAZEBO_boost_iostreams:FILEPATH=/usr/lib/x86_64-linux-gnu/libboost_iostreams.so
+
+//Path to a library.
+pkgcfg_lib_GAZEBO_boost_program_options:FILEPATH=/usr/lib/x86_64-linux-gnu/libboost_program_options.so
+
+//Path to a library.
+pkgcfg_lib_GAZEBO_boost_regex:FILEPATH=/usr/lib/x86_64-linux-gnu/libboost_regex.so
+
+//Path to a library.
+pkgcfg_lib_GAZEBO_boost_system:FILEPATH=/usr/lib/x86_64-linux-gnu/libboost_system.so
+
+//Path to a library.
+pkgcfg_lib_GAZEBO_boost_thread:FILEPATH=/usr/lib/x86_64-linux-gnu/libboost_thread.so
+
+//Path to a library.
+pkgcfg_lib_GAZEBO_gazebo:FILEPATH=/usr/lib/x86_64-linux-gnu/libgazebo.so
+
+//Path to a library.
+pkgcfg_lib_GAZEBO_gazebo_client:FILEPATH=/usr/lib/x86_64-linux-gnu/libgazebo_client.so
+
+//Path to a library.
+pkgcfg_lib_GAZEBO_gazebo_common:FILEPATH=/usr/lib/x86_64-linux-gnu/libgazebo_common.so
+
+//Path to a library.
+pkgcfg_lib_GAZEBO_gazebo_gui:FILEPATH=/usr/lib/x86_64-linux-gnu/libgazebo_gui.so
+
+//Path to a library.
+pkgcfg_lib_GAZEBO_gazebo_msgs:FILEPATH=/usr/lib/x86_64-linux-gnu/libgazebo_msgs.so
+
+//Path to a library.
+pkgcfg_lib_GAZEBO_gazebo_physics:FILEPATH=/usr/lib/x86_64-linux-gnu/libgazebo_physics.so
+
+//Path to a library.
+pkgcfg_lib_GAZEBO_gazebo_rendering:FILEPATH=/usr/lib/x86_64-linux-gnu/libgazebo_rendering.so
+
+//Path to a library.
+pkgcfg_lib_GAZEBO_gazebo_sensors:FILEPATH=/usr/lib/x86_64-linux-gnu/libgazebo_sensors.so
+
+//Path to a library.
+pkgcfg_lib_GAZEBO_gazebo_transport:FILEPATH=/usr/lib/x86_64-linux-gnu/libgazebo_transport.so
+
+//Path to a library.
+pkgcfg_lib_GAZEBO_ignition-fuel_tools4:FILEPATH=/usr/lib/x86_64-linux-gnu/libignition-fuel_tools4.so
+
+//Path to a library.
+pkgcfg_lib_GAZEBO_ignition-math6:FILEPATH=/usr/lib/x86_64-linux-gnu/libignition-math6.so
+
+//Path to a library.
+pkgcfg_lib_GAZEBO_ignition-msgs5:FILEPATH=/usr/lib/x86_64-linux-gnu/libignition-msgs5.so
+
+//Path to a library.
+pkgcfg_lib_GAZEBO_ignition-transport8:FILEPATH=/usr/lib/x86_64-linux-gnu/libignition-transport8.so
+
+//Path to a library.
+pkgcfg_lib_GAZEBO_protobuf:FILEPATH=/usr/lib/x86_64-linux-gnu/libprotobuf.so
+
+//Path to a library.
+pkgcfg_lib_GAZEBO_sdformat9:FILEPATH=/usr/lib/x86_64-linux-gnu/libsdformat9.so
+
+//Path to a library.
+pkgcfg_lib_GAZEBO_tbb:FILEPATH=/usr/lib/x86_64-linux-gnu/libtbb.so
+
 //Path to a library.
 pkgcfg_lib_yaml-cpp_yaml-cpp:FILEPATH=/usr/lib/x86_64-linux-gnu/libyaml-cpp.so
 
 //The directory containing a CMake configuration file for pluginlib.
 pluginlib_DIR:PATH=/opt/ros/noetic/share/pluginlib/cmake
+
+//The directory containing a CMake configuration file for position_controllers.
+position_controllers_DIR:PATH=/opt/ros/noetic/share/position_controllers/cmake
 
 //Value Computed by CMake
 racecar_BINARY_DIR:STATIC=/home/anushka/ws/build/racecar
@@ -560,8 +744,14 @@ racecar_gazebo_BINARY_DIR:STATIC=/home/anushka/ws/build/racecar_gazebo
 //Value Computed by CMake
 racecar_gazebo_SOURCE_DIR:STATIC=/home/anushka/ws/src/racecar_gazebo
 
+//The directory containing a CMake configuration file for realtime_tools.
+realtime_tools_DIR:PATH=/opt/ros/noetic/share/realtime_tools/cmake
+
 //The directory containing a CMake configuration file for rosconsole.
 rosconsole_DIR:PATH=/opt/ros/noetic/share/rosconsole/cmake
+
+//The directory containing a CMake configuration file for rosconsole_bridge.
+rosconsole_bridge_DIR:PATH=/opt/ros/noetic/share/rosconsole_bridge/cmake
 
 //The directory containing a CMake configuration file for roscpp.
 roscpp_DIR:PATH=/opt/ros/noetic/share/roscpp/cmake
@@ -599,6 +789,24 @@ sc649_assignment_3_SOURCE_DIR:STATIC=/home/anushka/ws/src/sc649_assignment_3
 //The directory containing a CMake configuration file for sensor_msgs.
 sensor_msgs_DIR:PATH=/opt/ros/noetic/share/sensor_msgs/cmake
 
+//Value Computed by CMake
+sicktoolbox_BINARY_DIR:STATIC=/home/anushka/ws/build/sicktoolbox
+
+//The directory containing a CMake configuration file for sicktoolbox.
+sicktoolbox_DIR:PATH=/home/anushka/ws/devel/share/sicktoolbox/cmake
+
+//Value Computed by CMake
+sicktoolbox_SOURCE_DIR:STATIC=/home/anushka/ws/src/sicktoolbox
+
+//Value Computed by CMake
+sicktoolbox_wrapper_BINARY_DIR:STATIC=/home/anushka/ws/build/sicktoolbox_wrapper
+
+//The directory containing a CMake configuration file for sicktoolbox_wrapper.
+sicktoolbox_wrapper_DIR:PATH=/home/anushka/ws/devel/share/sicktoolbox_wrapper/cmake
+
+//Value Computed by CMake
+sicktoolbox_wrapper_SOURCE_DIR:STATIC=/home/anushka/ws/src/sicktoolbox_wrapper
+
 //The directory containing a CMake configuration file for smclib.
 smclib_DIR:PATH=/opt/ros/noetic/share/smclib/cmake
 
@@ -607,6 +815,12 @@ std_msgs_DIR:PATH=/opt/ros/noetic/share/std_msgs/cmake
 
 //The directory containing a CMake configuration file for std_srvs.
 std_srvs_DIR:PATH=/opt/ros/noetic/share/std_srvs/cmake
+
+//Value Computed by CMake
+stepvel_BINARY_DIR:STATIC=/home/anushka/ws/build/stepvel
+
+//Value Computed by CMake
+stepvel_SOURCE_DIR:STATIC=/home/anushka/ws/src/stepvel
 
 //The directory containing a CMake configuration file for tf2.
 tf2_DIR:PATH=/opt/ros/noetic/share/tf2/cmake
@@ -626,6 +840,24 @@ tf_DIR:PATH=/opt/ros/noetic/share/tf/cmake
 //The directory containing a CMake configuration file for trajectory_msgs.
 trajectory_msgs_DIR:PATH=/opt/ros/noetic/share/trajectory_msgs/cmake
 
+//The directory containing a CMake configuration file for transmission_interface.
+transmission_interface_DIR:PATH=/opt/ros/noetic/share/transmission_interface/cmake
+
+//The directory containing a CMake configuration file for urdf.
+urdf_DIR:PATH=/opt/ros/noetic/share/urdf/cmake
+
+//The directory containing a CMake configuration file for velocity_controllers.
+velocity_controllers_DIR:PATH=/opt/ros/noetic/share/velocity_controllers/cmake
+
+//The directory containing a CMake configuration file for velodyne_driver.
+velodyne_driver_DIR:PATH=/opt/ros/noetic/share/velodyne_driver/cmake
+
+//The directory containing a CMake configuration file for velodyne_msgs.
+velodyne_msgs_DIR:PATH=/opt/ros/noetic/share/velodyne_msgs/cmake
+
+//The directory containing a CMake configuration file for velodyne_pointcloud.
+velodyne_pointcloud_DIR:PATH=/opt/ros/noetic/share/velodyne_pointcloud/cmake
+
 //The directory containing a CMake configuration file for xmlrpcpp.
 xmlrpcpp_DIR:PATH=/opt/ros/noetic/share/xmlrpcpp/cmake
 
@@ -634,6 +866,8 @@ xmlrpcpp_DIR:PATH=/opt/ros/noetic/share/xmlrpcpp/cmake
 # INTERNAL cache entries
 ########################
 
+//ADVANCED property for variable: Boost_DIR
+Boost_DIR-ADVANCED:INTERNAL=1
 //catkin environment
 CATKIN_ENV:INTERNAL=/home/anushka/ws/build/catkin_generated/env_cached.sh
 CATKIN_TEST_RESULTS_DIR:INTERNAL=/home/anushka/ws/build/test_results
@@ -777,7 +1011,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=11
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=18
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
@@ -820,6 +1054,8 @@ CMAKE_STRIP-ADVANCED:INTERNAL=1
 CMAKE_UNAME:INTERNAL=/usr/bin/uname
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
+//Details about finding Boost
+FIND_PACKAGE_MESSAGE_DETAILS_Boost:INTERNAL=[/usr/lib/x86_64-linux-gnu/cmake/Boost-1.71.0/BoostConfig.cmake][cfound components: system ][v1.71.0()]
 //Details about finding PY_em
 FIND_PACKAGE_MESSAGE_DETAILS_PY_em:INTERNAL=[/usr/lib/python3/dist-packages/em.py][v()]
 //Details about finding PkgConfig
@@ -828,6 +1064,43 @@ FIND_PACKAGE_MESSAGE_DETAILS_PkgConfig:INTERNAL=[/usr/bin/pkg-config][v0.29.1()]
 FIND_PACKAGE_MESSAGE_DETAILS_PythonInterp:INTERNAL=[/usr/bin/python3][v3.8.10()]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
+//Details about finding TinyXML
+FIND_PACKAGE_MESSAGE_DETAILS_TinyXML:INTERNAL=[/usr/lib/x86_64-linux-gnu/libtinyxml.so][/usr/include][v()]
+GAZEBO_CFLAGS:INTERNAL=-std=c++11;-std=c++17;-isystem;/usr/include/mit-krb5;-std=c++17;-pthread;-std=c++17;-I/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/gazebo-11;-I/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/sdformat-9.10;-I/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/ignition/fuel_tools4;-I/usr/include/x86_64-linux-gnu;-I/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/ignition/common3;-I/usr/include/uuid;-I/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/ignition/transport8;-I/usr/include/pgm-5.2;-I/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/ignition/msgs5;-I/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/ignition/math6;-I/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/ignition/cmake2
+GAZEBO_CFLAGS_I:INTERNAL=
+GAZEBO_CFLAGS_OTHER:INTERNAL=-std=c++11;-std=c++17;-isystem;/usr/include/mit-krb5;-std=c++17;-pthread;-std=c++17
+GAZEBO_FOUND:INTERNAL=1
+GAZEBO_INCLUDEDIR:INTERNAL=/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include
+GAZEBO_INCLUDE_DIRS:INTERNAL=/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/gazebo-11;/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/sdformat-9.10;/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/ignition/fuel_tools4;/usr/include/x86_64-linux-gnu;/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/ignition/common3;/usr/include/uuid;/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/ignition/transport8;/usr/include/pgm-5.2;/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/ignition/msgs5;/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/ignition/math6;/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/ignition/cmake2
+GAZEBO_LDFLAGS:INTERNAL=-L/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//lib/x86_64-linux-gnu;-L/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//lib/x86_64-linux-gnu/gazebo-11/plugins;-L/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//lib/x86_64-linux-gnu;-Wl,-rpath,/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//lib/x86_64-linux-gnu/gazebo-11/plugins;-lgazebo_transport;-lgazebo_physics;-lgazebo_sensors;-lgazebo_rendering;-lgazebo_gui;-lgazebo_client;-lgazebo_msgs;-lgazebo_common;-lgazebo;-lboost_thread;-lboost_system;-lboost_filesystem;-lboost_program_options;-lboost_regex;-lboost_iostreams;-lboost_date_time;-lsdformat9;-ltbb;-latomic;-lignition-fuel_tools4;-lignition-transport8;-lignition-msgs5;-lprotobuf;-pthread;-lignition-math6
+GAZEBO_LDFLAGS_OTHER:INTERNAL=-Wl,-rpath,/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//lib/x86_64-linux-gnu/gazebo-11/plugins;-pthread
+GAZEBO_LIBDIR:INTERNAL=/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//lib/x86_64-linux-gnu
+GAZEBO_LIBRARIES:INTERNAL=gazebo_transport;gazebo_physics;gazebo_sensors;gazebo_rendering;gazebo_gui;gazebo_client;gazebo_msgs;gazebo_common;gazebo;boost_thread;boost_system;boost_filesystem;boost_program_options;boost_regex;boost_iostreams;boost_date_time;sdformat9;tbb;atomic;ignition-fuel_tools4;ignition-transport8;ignition-msgs5;protobuf;ignition-math6
+GAZEBO_LIBRARY_DIRS:INTERNAL=/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//lib/x86_64-linux-gnu;/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//lib/x86_64-linux-gnu/gazebo-11/plugins;/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//lib/x86_64-linux-gnu
+GAZEBO_LIBS:INTERNAL=
+GAZEBO_LIBS_L:INTERNAL=
+GAZEBO_LIBS_OTHER:INTERNAL=
+GAZEBO_LIBS_PATHS:INTERNAL=
+GAZEBO_MODULE_NAME:INTERNAL=gazebo
+GAZEBO_PREFIX:INTERNAL=/usr/lib/x86_64-linux-gnu/pkgconfig/../../../
+GAZEBO_STATIC_CFLAGS:INTERNAL=-std=c++11;-std=c++17;-isystem;/usr/include/mit-krb5;-std=c++17;-pthread;-std=c++17;-I/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/gazebo-11;-I/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/sdformat-9.10;-I/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/ignition/fuel_tools4;-I/usr/include/x86_64-linux-gnu;-I/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/ignition/common3;-I/usr/include/uuid;-I/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/ignition/transport8;-I/usr/include/pgm-5.2;-I/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/ignition/msgs5;-I/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/ignition/math6;-I/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/ignition/cmake2
+GAZEBO_STATIC_CFLAGS_I:INTERNAL=
+GAZEBO_STATIC_CFLAGS_OTHER:INTERNAL=-std=c++11;-std=c++17;-isystem;/usr/include/mit-krb5;-std=c++17;-pthread;-std=c++17
+GAZEBO_STATIC_INCLUDE_DIRS:INTERNAL=/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/gazebo-11;/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/sdformat-9.10;/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/ignition/fuel_tools4;/usr/include/x86_64-linux-gnu;/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/ignition/common3;/usr/include/uuid;/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/ignition/transport8;/usr/include/pgm-5.2;/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/ignition/msgs5;/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/ignition/math6;/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//include/ignition/cmake2
+GAZEBO_STATIC_LDFLAGS:INTERNAL=-L/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//lib/x86_64-linux-gnu;-L/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//lib/x86_64-linux-gnu/gazebo-11/plugins;-L/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//lib/x86_64-linux-gnu;-L/usr/lib/x86_64-linux-gnu/mit-krb5;-L/usr//usr/lib/x86_64-linux-gnu;-L/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//lib/x86_64-linux-gnu;-L/usr/lib/x86_64-linux-gnu/mit-krb5;-L/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//lib/x86_64-linux-gnu;-Wl,-rpath,/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//lib/x86_64-linux-gnu/gazebo-11/plugins;-lgazebo_transport;-lgazebo_physics;-lgazebo_sensors;-lgazebo_rendering;-lgazebo_gui;-lgazebo_client;-lgazebo_msgs;-lgazebo_common;-lgazebo;-lboost_thread;-lboost_system;-lboost_filesystem;-lboost_program_options;-lboost_regex;-lboost_iostreams;-lboost_date_time;-lsdformat9;-ltbb;-latomic;-lignition-fuel_tools4;-lcurl;-lnghttp2;-lidn2;-lrtmp;-lssh;-lpsl;-lssl;-lcrypto;-lssl;-lcrypto;-Wl,-Bsymbolic-functions;-Wl,-z,relro;-lgssapi_krb5;-lkrb5;-lk5crypto;-lcom_err;-llber;-lldap;-llber;-lbrotlidec;-lz;-lyaml;-lzip;-lbz2;-lz;-lignition-common3;-ldl;-luuid;-lignition-transport8;-lzmq;-lstdc++;-lpthread;-lrt;-lgssapi_krb5;-lkrb5;-lk5crypto;-lcom_err;-lkrb5support;-lsodium;-pthread;-lpgm;-lpthread;-lm;-lnorm;-lstdc++;-lprotolib;-lignition-msgs5;-ltinyxml2;-lprotobuf;-pthread;-lz;-lignition-math6
+GAZEBO_STATIC_LDFLAGS_OTHER:INTERNAL=-Wl,-rpath,/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//lib/x86_64-linux-gnu/gazebo-11/plugins;-Wl,-Bsymbolic-functions;-Wl,-z,relro;-pthread
+GAZEBO_STATIC_LIBDIR:INTERNAL=
+GAZEBO_STATIC_LIBRARIES:INTERNAL=gazebo_transport;gazebo_physics;gazebo_sensors;gazebo_rendering;gazebo_gui;gazebo_client;gazebo_msgs;gazebo_common;gazebo;boost_thread;boost_system;boost_filesystem;boost_program_options;boost_regex;boost_iostreams;boost_date_time;sdformat9;tbb;atomic;ignition-fuel_tools4;curl;nghttp2;idn2;rtmp;ssh;psl;ssl;crypto;ssl;crypto;gssapi_krb5;krb5;k5crypto;com_err;lber;ldap;lber;brotlidec;z;yaml;zip;bz2;z;ignition-common3;dl;uuid;ignition-transport8;zmq;stdc++;pthread;rt;gssapi_krb5;krb5;k5crypto;com_err;krb5support;sodium;pgm;pthread;m;norm;stdc++;protolib;ignition-msgs5;tinyxml2;protobuf;z;ignition-math6
+GAZEBO_STATIC_LIBRARY_DIRS:INTERNAL=/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//lib/x86_64-linux-gnu;/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//lib/x86_64-linux-gnu/gazebo-11/plugins;/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//lib/x86_64-linux-gnu;/usr/lib/x86_64-linux-gnu/mit-krb5;/usr//usr/lib/x86_64-linux-gnu;/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//lib/x86_64-linux-gnu;/usr/lib/x86_64-linux-gnu/mit-krb5;/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//lib/x86_64-linux-gnu
+GAZEBO_STATIC_LIBS:INTERNAL=
+GAZEBO_STATIC_LIBS_L:INTERNAL=
+GAZEBO_STATIC_LIBS_OTHER:INTERNAL=
+GAZEBO_STATIC_LIBS_PATHS:INTERNAL=
+GAZEBO_VERSION:INTERNAL=11.14.0
+GAZEBO_gazebo_INCLUDEDIR:INTERNAL=
+GAZEBO_gazebo_LIBDIR:INTERNAL=
+GAZEBO_gazebo_PREFIX:INTERNAL=
+GAZEBO_gazebo_VERSION:INTERNAL=
 GMOCK_FROM_SOURCE_FOUND:INTERNAL=TRUE
 GMOCK_FROM_SOURCE_INCLUDE_DIRS:INTERNAL=/usr/src/googletest/googlemock/include
 GMOCK_FROM_SOURCE_LIBRARIES:INTERNAL=gmock
@@ -864,9 +1137,23 @@ PYTHON_EXECUTABLE-ADVANCED:INTERNAL=1
 //  And it needs to match.  But setuptools won't tell us where
 // it will install things.
 PYTHON_INSTALL_DIR:INTERNAL=lib/python3/dist-packages
+//ADVANCED property for variable: TinyXML_INCLUDE_DIR
+TinyXML_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: TinyXML_LIBRARY
+TinyXML_LIBRARY-ADVANCED:INTERNAL=1
 //CMAKE_INSTALL_PREFIX during last run
 _GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=/home/anushka/ws/install
+__pkg_config_arguments_GAZEBO:INTERNAL=gazebo
+__pkg_config_checked_GAZEBO:INTERNAL=1
 __pkg_config_checked_yaml-cpp:INTERNAL=1
+//ADVANCED property for variable: boost_atomic_DIR
+boost_atomic_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: boost_headers_DIR
+boost_headers_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: boost_system_DIR
+boost_system_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: boost_thread_DIR
+boost_thread_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: gmock_build_tests
 gmock_build_tests-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: gtest_build_samples
@@ -879,9 +1166,57 @@ gtest_disable_pthreads-ADVANCED:INTERNAL=1
 gtest_force_shared_crt-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: gtest_hide_internal_symbols
 gtest_hide_internal_symbols-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_GAZEBO_atomic
+pkgcfg_lib_GAZEBO_atomic-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_GAZEBO_boost_date_time
+pkgcfg_lib_GAZEBO_boost_date_time-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_GAZEBO_boost_filesystem
+pkgcfg_lib_GAZEBO_boost_filesystem-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_GAZEBO_boost_iostreams
+pkgcfg_lib_GAZEBO_boost_iostreams-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_GAZEBO_boost_program_options
+pkgcfg_lib_GAZEBO_boost_program_options-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_GAZEBO_boost_regex
+pkgcfg_lib_GAZEBO_boost_regex-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_GAZEBO_boost_system
+pkgcfg_lib_GAZEBO_boost_system-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_GAZEBO_boost_thread
+pkgcfg_lib_GAZEBO_boost_thread-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_GAZEBO_gazebo
+pkgcfg_lib_GAZEBO_gazebo-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_GAZEBO_gazebo_client
+pkgcfg_lib_GAZEBO_gazebo_client-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_GAZEBO_gazebo_common
+pkgcfg_lib_GAZEBO_gazebo_common-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_GAZEBO_gazebo_gui
+pkgcfg_lib_GAZEBO_gazebo_gui-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_GAZEBO_gazebo_msgs
+pkgcfg_lib_GAZEBO_gazebo_msgs-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_GAZEBO_gazebo_physics
+pkgcfg_lib_GAZEBO_gazebo_physics-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_GAZEBO_gazebo_rendering
+pkgcfg_lib_GAZEBO_gazebo_rendering-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_GAZEBO_gazebo_sensors
+pkgcfg_lib_GAZEBO_gazebo_sensors-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_GAZEBO_gazebo_transport
+pkgcfg_lib_GAZEBO_gazebo_transport-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_GAZEBO_ignition-fuel_tools4
+pkgcfg_lib_GAZEBO_ignition-fuel_tools4-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_GAZEBO_ignition-math6
+pkgcfg_lib_GAZEBO_ignition-math6-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_GAZEBO_ignition-msgs5
+pkgcfg_lib_GAZEBO_ignition-msgs5-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_GAZEBO_ignition-transport8
+pkgcfg_lib_GAZEBO_ignition-transport8-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_GAZEBO_protobuf
+pkgcfg_lib_GAZEBO_protobuf-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_GAZEBO_sdformat9
+pkgcfg_lib_GAZEBO_sdformat9-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_GAZEBO_tbb
+pkgcfg_lib_GAZEBO_tbb-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: pkgcfg_lib_yaml-cpp_yaml-cpp
 pkgcfg_lib_yaml-cpp_yaml-cpp-ADVANCED:INTERNAL=1
-prefix_result:INTERNAL=/usr//usr/lib/x86_64-linux-gnu
+prefix_result:INTERNAL=/usr/lib/x86_64-linux-gnu/pkgconfig/../../..//lib/x86_64-linux-gnu
 yaml-cpp_CFLAGS:INTERNAL=
 yaml-cpp_CFLAGS_I:INTERNAL=
 yaml-cpp_CFLAGS_OTHER:INTERNAL=
