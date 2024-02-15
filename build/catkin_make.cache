@@ -1,0 +1,2 @@
+ackermann_cmd_mux:catvehicle:cmdvel2gazebo:control_toolbox:dyn_IPC_sim:obstaclestopper:racecar:racecar_control:racecar_description:racecar_gazebo:sc649_assignment_3:sicktoolbox:sicktoolbox_wrapper:stepvel
+-DCATKIN_DEVEL_PREFIX=/home/anushka/ws/devel -DCMAKE_INSTALL_PREFIX=/home/anushka/ws/install -G Unix Makefiles

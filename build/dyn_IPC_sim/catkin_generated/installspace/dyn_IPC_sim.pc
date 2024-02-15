@@ -1,0 +1,8 @@
+prefix=/home/anushka/ws/install
+
+Name: dyn_IPC_sim
+Description: Description of dyn_IPC_sim
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
